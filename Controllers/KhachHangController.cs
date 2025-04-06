@@ -3,6 +3,8 @@ using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using QLKS_115_Nhom3_BE.Helpers;
+using QLKS_115_Nhom3_BE.Models;
 
 namespace QLKS_115_Nhom3_BE.Controllers
 {
@@ -19,9 +21,11 @@ namespace QLKS_115_Nhom3_BE.Controllers
 
         // GET: api/KhachHang
         [HttpGet]
-        public async Task<IEnumerable<KhachHangDTO>> Get()
+        public async Task<ActionResult<PagedResult<KhachHangDTO>>> Get(int page = 1, int pageSize = 10)
         {
-            return await _db.QueryAsync<KhachHangDTO>("SELECT * FROM KhachHang");
+            var sql = "SELECT * FROM KhachHang";
+            var result = await PaginationHelper.GetPagedDataAsync<KhachHangDTO>(_db, sql, page, pageSize);
+            return Ok(result);
         }
 
         // GET api/KhachHang/{id}
