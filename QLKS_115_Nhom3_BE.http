@@ -1,6 +1,0 @@
-@QLKS_115_Nhom3_BE_HostAddress = http://localhost:5069
-
-GET {{QLKS_115_Nhom3_BE_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
