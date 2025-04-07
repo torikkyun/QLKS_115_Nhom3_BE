@@ -1,7 +1,6 @@
 using System.Data;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using QLKS_115_Nhom3_BE.Helpers;
 using QLKS_115_Nhom3_BE.Models;
@@ -14,9 +13,9 @@ namespace QLKS_115_Nhom3_BE.Controllers
     {
         private readonly IDbConnection _db;
 
-        public KhachHangController(IConfiguration configuration)
+        public KhachHangController(IDbConnection db)
         {
-            _db = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
+            _db = db;
         }
 
         // GET: api/KhachHang
