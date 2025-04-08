@@ -19,11 +19,11 @@ public partial class NhanVien
 
     public string MatKhau { get; set; } = null!;
 
-    public int? VaiTro { get; set; }
+    public int VaiTro { get; set; }
 
     public virtual ICollection<DatPhong> DatPhongs { get; set; } = new List<DatPhong>();
 
     public virtual ICollection<HoaDon> HoaDons { get; set; } = new List<HoaDon>();
 
-    public virtual VaiTro? VaiTroNavigation { get; set; }
+    public virtual VaiTro VaiTroNavigation { get; set; } = null!;
 }
