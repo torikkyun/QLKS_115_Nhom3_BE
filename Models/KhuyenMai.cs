@@ -9,7 +9,7 @@ public partial class KhuyenMai
 
     public string TenKhuyenMai { get; set; } = null!;
 
-    public string KieuKhuyenMai { get; set; } = null!;
+    public byte KieuKhuyenMai { get; set; }
 
     public string MoTaKhuyenMai { get; set; } = null!;
 
@@ -22,4 +22,6 @@ public partial class KhuyenMai
     public string? GhiChu { get; set; }
 
     public virtual ICollection<ChiTietDatPhong> ChiTietDatPhongs { get; set; } = new List<ChiTietDatPhong>();
+
+    public virtual KieuKhuyenMaiEnum KieuKhuyenMaiNavigation { get; set; } = null!;
 }

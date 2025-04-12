@@ -9,11 +9,13 @@ public partial class Phong
 
     public string SoPhong { get; set; } = null!;
 
-    public bool TinhTrangPhong { get; set; }
+    public byte TinhTrangPhong { get; set; }
 
     public int? LoaiPhong { get; set; }
 
     public virtual ICollection<ChiTietDatPhong> ChiTietDatPhongs { get; set; } = new List<ChiTietDatPhong>();
 
     public virtual LoaiPhong? LoaiPhongNavigation { get; set; }
+
+    public virtual TinhTrangPhongEnum TinhTrangPhongNavigation { get; set; } = null!;
 }
