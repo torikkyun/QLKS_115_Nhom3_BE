@@ -38,8 +38,7 @@ public partial class DataQlks115Nhom3Context : DbContext
     public virtual DbSet<VaiTro> VaiTros { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=.;Database=data_QLKS_115_Nhom3;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true");
+        => optionsBuilder.UseSqlServer("Name=DefaultConnection");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -85,7 +84,7 @@ public partial class DataQlks115Nhom3Context : DbContext
 
         modelBuilder.Entity<DatPhong>(entity =>
         {
-            entity.HasKey(e => e.MaDatPhong).HasName("PK__DatPhong__6344ADEA3B0C93AD");
+            entity.HasKey(e => e.MaDatPhong).HasName("PK__DatPhong__6344ADEAA04C809F");
 
             entity.ToTable("DatPhong");
 
@@ -103,7 +102,7 @@ public partial class DataQlks115Nhom3Context : DbContext
 
         modelBuilder.Entity<DichVu>(entity =>
         {
-            entity.HasKey(e => e.MaDichVu).HasName("PK__DichVu__C0E6DE8F93ABFA9E");
+            entity.HasKey(e => e.MaDichVu).HasName("PK__DichVu__C0E6DE8F54C7E6BE");
 
             entity.ToTable("DichVu");
 
@@ -114,7 +113,7 @@ public partial class DataQlks115Nhom3Context : DbContext
 
         modelBuilder.Entity<HoaDon>(entity =>
         {
-            entity.HasKey(e => e.DatPhong).HasName("PK__HoaDon__2192D0714D96DA3F");
+            entity.HasKey(e => e.DatPhong).HasName("PK__HoaDon__2192D071DFDD05D3");
 
             entity.ToTable("HoaDon");
 
@@ -134,11 +133,11 @@ public partial class DataQlks115Nhom3Context : DbContext
 
         modelBuilder.Entity<KhachHang>(entity =>
         {
-            entity.HasKey(e => e.MaKhachHang).HasName("PK__KhachHan__88D2F0E58A673E19");
+            entity.HasKey(e => e.MaKhachHang).HasName("PK__KhachHan__88D2F0E5B7547993");
 
             entity.ToTable("KhachHang");
 
-            entity.HasIndex(e => e.Cccd, "UQ__KhachHan__A955A0AA05DDFAFE").IsUnique();
+            entity.HasIndex(e => e.Cccd, "UQ__KhachHan__A955A0AA7D07FBD9").IsUnique();
 
             entity.Property(e => e.Cccd)
                 .HasMaxLength(20)
@@ -155,7 +154,7 @@ public partial class DataQlks115Nhom3Context : DbContext
 
         modelBuilder.Entity<KhuyenMai>(entity =>
         {
-            entity.HasKey(e => e.MaKhuyenMai).HasName("PK__KhuyenMa__6F56B3BDAD2AC2FB");
+            entity.HasKey(e => e.MaKhuyenMai).HasName("PK__KhuyenMa__6F56B3BD5BAFDBDF");
 
             entity.ToTable("KhuyenMai");
 
@@ -167,7 +166,7 @@ public partial class DataQlks115Nhom3Context : DbContext
 
         modelBuilder.Entity<LoaiPhong>(entity =>
         {
-            entity.HasKey(e => e.MaLoaiPhong).HasName("PK__LoaiPhon__23021217FCD3A71E");
+            entity.HasKey(e => e.MaLoaiPhong).HasName("PK__LoaiPhon__230212172C8D431E");
 
             entity.ToTable("LoaiPhong");
 
@@ -176,11 +175,11 @@ public partial class DataQlks115Nhom3Context : DbContext
 
         modelBuilder.Entity<NhanVien>(entity =>
         {
-            entity.HasKey(e => e.MaNhanVien).HasName("PK__NhanVien__77B2CA4736580129");
+            entity.HasKey(e => e.MaNhanVien).HasName("PK__NhanVien__77B2CA47BB671286");
 
             entity.ToTable("NhanVien");
 
-            entity.HasIndex(e => e.Cccd, "UQ__NhanVien__A955A0AAD5389840").IsUnique();
+            entity.HasIndex(e => e.Cccd, "UQ__NhanVien__A955A0AAB6BE10AD").IsUnique();
 
             entity.Property(e => e.Cccd)
                 .HasMaxLength(20)
@@ -203,7 +202,7 @@ public partial class DataQlks115Nhom3Context : DbContext
 
         modelBuilder.Entity<Phong>(entity =>
         {
-            entity.HasKey(e => e.MaPhong).HasName("PK__Phong__20BD5E5B4465313A");
+            entity.HasKey(e => e.MaPhong).HasName("PK__Phong__20BD5E5BE02D6409");
 
             entity.ToTable("Phong");
 
@@ -218,7 +217,7 @@ public partial class DataQlks115Nhom3Context : DbContext
 
         modelBuilder.Entity<VaiTro>(entity =>
         {
-            entity.HasKey(e => e.MaVaiTro).HasName("PK__VaiTro__C24C41CF43DA1E54");
+            entity.HasKey(e => e.MaVaiTro).HasName("PK__VaiTro__C24C41CF119C59F0");
 
             entity.ToTable("VaiTro");
 

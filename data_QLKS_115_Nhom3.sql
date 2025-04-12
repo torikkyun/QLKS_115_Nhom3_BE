@@ -1,123 +1,162 @@
-﻿use data_QLKS_115_Nhom3
-go
+﻿USE data_QLKS_115_Nhom3;
+GO
 
-create table KhachHang(
-	MaKhachHang int identity(1, 1) primary key,
-	Ho nvarchar(50) not null,
-	Ten nvarchar(20) not null,
-	Email nvarchar(50) null,
-	SDT varchar(20) not null,
-	CCCD varchar(20) unique
-)
+CREATE TABLE LoaiDichVuEnum (
+    Id TINYINT PRIMARY KEY,
+    TenLoai NVARCHAR(50) NOT NULL
+);
 
-create table VaiTro(
-	MaVaiTro int identity(1, 1) primary key,
-	TenVaiTro nvarchar(50) not null,
-	GhiChu nvarchar(100) null
-)
+INSERT INTO LoaiDichVuEnum (Id, TenLoai) VALUES 
+(1, N'Dịch vụ phòng'),
+(2, N'Dịch vụ ăn uống'),
+(3, N'Dịch vụ giải trí'),
+(4, N'Dịch vụ spa'),
+(5, N'Dịch vụ giặt ủi'),
+(6, N'Dịch vụ khác');
 
-create table LoaiPhong(
-	MaLoaiPhong int identity(1, 1) primary key,
-	SoGiuong int not null,
-	GhiChu nvarchar(100) null
-)
+CREATE TABLE KieuKhuyenMaiEnum (
+    Id TINYINT PRIMARY KEY,
+    TenKieu NVARCHAR(50) NOT NULL
+);
 
-create table DichVu(
-	MaDichVu int identity(1, 1) primary key,
-	TenDichVu nvarchar(50) not null,
-	LoaiDichVu nvarchar(50) not null,
-	GhiChu nvarchar(100) null
-)
+INSERT INTO KieuKhuyenMaiEnum (Id, TenKieu) VALUES 
+(1, N'Phần trăm'),
+(2, N'Giảm giá trực tiếp'),
+(3, N'Đặc biệt');
 
-create table KhuyenMai(
-	MaKhuyenMai int identity(1, 1) primary key,
-	TenKhuyenMai nvarchar(50) not null,
-	KieuKhuyenMai nvarchar(50) not null,
-	MoTaKhuyenMai nvarchar(100) not null,
-	NgayBatDau date not null,
-	NgayKetThuc date not null,
-	GiaTriKhuyenMai int not null,
-	GhiChu nvarchar(100) null
-)
+CREATE TABLE TinhTrangPhongEnum (
+    Id TINYINT PRIMARY KEY,
+    TenTinhTrang NVARCHAR(50) NOT NULL
+);
 
-create table NhanVien(
-	MaNhanVien int identity(1, 1) primary key,
-	Ho nvarchar(50) not null,
-	Ten nvarchar(20) not null,
-	Email nvarchar(50) null,
-	SDT varchar(20) not null,
-	CCCD varchar(20) unique,
-	MatKhau nvarchar(50) not null,
-	VaiTro int,
-	constraint fk_NhanVien_VaiTro foreign key (VaiTro)
-	references VaiTro(MaVaiTro)
-)
+INSERT INTO TinhTrangPhongEnum (Id, TenTinhTrang) VALUES 
+(0, N'Đang sử dụng'),
+(1, N'Trống'),
+(2, N'Bảo trì');
 
-create table Phong(
-	MaPhong int identity(1, 1) primary key,
-	SoPhong varchar(5) not null,
-	TinhTrangPhong bit not null,
-	LoaiPhong int,
-	constraint fk_Phong_LoaiPhong foreign key (LoaiPhong)
-	references LoaiPhong(MaLoaiPhong)
-)
+CREATE TABLE KhachHang(
+    MaKhachHang INT IDENTITY(1, 1) PRIMARY KEY,
+    Ho NVARCHAR(50) NOT NULL,
+    Ten NVARCHAR(20) NOT NULL,
+    Email NVARCHAR(50) NULL,
+    SDT VARCHAR(20) NOT NULL,
+    CCCD VARCHAR(20) UNIQUE
+);
 
-create table DatPhong(
-	MaDatPhong int identity(1, 1) primary key,
-	NgayDatPhong date default(getdate()) not null,
-	SoPhongDat int not null,
-	GhiChu nvarchar(100) null,
-	NhanVien int,
-	KhachHang int,
-	constraint fk_DatPhong_NhanVien foreign key (NhanVien)
-	references NhanVien(MaNhanVien),
-	constraint fk_DatPhong_KhachHang foreign key (KhachHang)
-	references KhachHang(MaKhachHang)
-)
+CREATE TABLE VaiTro(
+    MaVaiTro INT IDENTITY(1, 1) PRIMARY KEY,
+    TenVaiTro NVARCHAR(50) NOT NULL,
+    GhiChu NVARCHAR(100) NULL
+);
 
-create table HoaDon(
-	DatPhong int primary key,
-	NgayXuatHoaDon date default(getdate()) not null,
-	TinhTrangThanhToan bit not null,
-	TongTien int not null,
-	TongTienPhong int not null,
-	TongTienDichVu int not null,
-	GhiChu nvarchar(100) null,
-	NhanVien int,
-	constraint fk_HoaDon_DatPhong foreign key (DatPhong) 
-	references DatPhong(MaDatPhong),
-	constraint fk_HoaDon_NhanVien foreign key (NhanVien) 
-	references NhanVien(MaNhanVien)
-)
+CREATE TABLE LoaiPhong(
+    MaLoaiPhong INT IDENTITY(1, 1) PRIMARY KEY,
+    SoGiuong INT NOT NULL,
+    GhiChu NVARCHAR(100) NULL
+);
 
-create table ChiTietDatPhong(
-	Phong int,
-	DatPhong int,
-	KhuyenMai int,
-	NgayTraPhong date not null,
-	NgayNhanPhong date not null,
-	GiaPhong int not null,
-	constraint pk_ChiTietDatPhong primary key (Phong, DatPhong),
-	constraint fk_ChiTietDatPhong_Phong foreign key (Phong) 
-	references Phong(MaPhong),
-	constraint fk_ChiTietDatPhong_DatPhong foreign key (DatPhong)
-	references DatPhong(MaDatPhong),
-	constraint fk_ChiTietDatPhong_KhuyenMai foreign key (KhuyenMai)
-	references KhuyenMai(MaKhuyenMai)
-)
+CREATE TABLE DichVu(
+    MaDichVu INT IDENTITY(1, 1) PRIMARY KEY,
+    TenDichVu NVARCHAR(50) NOT NULL,
+    LoaiDichVu TINYINT NOT NULL,
+    GhiChu NVARCHAR(100) NULL,
+    CONSTRAINT FK_DichVu_LoaiDichVu FOREIGN KEY (LoaiDichVu)
+    REFERENCES LoaiDichVuEnum(Id)
+);
 
-create table ChiTietDichVu(
-	Phong int,
-	DatPhong int,
-	DichVu int,
-	GiaDichVu int not null,
-	NgaySuDung date default(getDate()) not null,
-	constraint pk_ChiTietDichVu primary key (Phong, DatPhong, DichVu),
-	constraint fk_ChiTietDichVu_ChiTietDatPhong foreign key (Phong, DatPhong)
-	references ChiTietDatPhong(Phong, DatPhong),
-	constraint fk_ChiTietDichVu_DichVu foreign key (DichVu)
-	references DichVu(MaDichVu)
-)
+CREATE TABLE KhuyenMai(
+    MaKhuyenMai INT IDENTITY(1, 1) PRIMARY KEY,
+    TenKhuyenMai NVARCHAR(50) NOT NULL,
+    KieuKhuyenMai TINYINT NOT NULL,
+    MoTaKhuyenMai NVARCHAR(100) NOT NULL,
+    NgayBatDau DATE NOT NULL,
+    NgayKetThuc DATE NOT NULL,
+    GiaTriKhuyenMai INT NOT NULL,
+    GhiChu NVARCHAR(100) NULL,
+    CONSTRAINT FK_KhuyenMai_KieuKhuyenMai FOREIGN KEY (KieuKhuyenMai)
+    REFERENCES KieuKhuyenMaiEnum(Id)
+);
+
+CREATE TABLE NhanVien(
+    MaNhanVien INT IDENTITY(1, 1) PRIMARY KEY,
+    Ho NVARCHAR(50) NOT NULL,
+    Ten NVARCHAR(20) NOT NULL,
+    Email NVARCHAR(50) NULL,
+    SDT VARCHAR(20) NOT NULL,
+    CCCD VARCHAR(20) UNIQUE,
+    MatKhau NVARCHAR(50) NOT NULL,
+    VaiTro INT NOT NULL,
+    CONSTRAINT FK_NhanVien_VaiTro FOREIGN KEY (VaiTro)
+    REFERENCES VaiTro(MaVaiTro)
+);
+
+CREATE TABLE Phong(
+    MaPhong INT IDENTITY(1, 1) PRIMARY KEY,
+    SoPhong VARCHAR(5) NOT NULL,
+    TinhTrangPhong TINYINT NOT NULL,
+    LoaiPhong INT,
+    CONSTRAINT FK_Phong_LoaiPhong FOREIGN KEY (LoaiPhong)
+    REFERENCES LoaiPhong(MaLoaiPhong),
+    CONSTRAINT FK_Phong_TinhTrangPhong FOREIGN KEY (TinhTrangPhong)
+    REFERENCES TinhTrangPhongEnum(Id)
+);
+
+CREATE TABLE DatPhong(
+    MaDatPhong INT IDENTITY(1, 1) PRIMARY KEY,
+    NgayDatPhong DATE DEFAULT(GETDATE()) NOT NULL,
+    SoPhongDat INT NOT NULL,
+    GhiChu NVARCHAR(100) NULL,
+    NhanVien INT,
+    KhachHang INT,
+    CONSTRAINT FK_DatPhong_NhanVien FOREIGN KEY (NhanVien)
+    REFERENCES NhanVien(MaNhanVien),
+    CONSTRAINT FK_DatPhong_KhachHang FOREIGN KEY (KhachHang)
+    REFERENCES KhachHang(MaKhachHang)
+);
+
+CREATE TABLE HoaDon(
+    DatPhong INT PRIMARY KEY,
+    NgayXuatHoaDon DATE DEFAULT(GETDATE()) NOT NULL,
+    TinhTrangThanhToan BIT NOT NULL,
+    TongTien INT NOT NULL,
+    TongTienPhong INT NOT NULL,
+    TongTienDichVu INT NOT NULL,
+    GhiChu NVARCHAR(100) NULL,
+    NhanVien INT,
+    CONSTRAINT FK_HoaDon_DatPhong FOREIGN KEY (DatPhong) 
+    REFERENCES DatPhong(MaDatPhong),
+    CONSTRAINT FK_HoaDon_NhanVien FOREIGN KEY (NhanVien) 
+    REFERENCES NhanVien(MaNhanVien)
+);
+
+CREATE TABLE ChiTietDatPhong(
+    Phong INT,
+    DatPhong INT,
+    KhuyenMai INT,
+    NgayTraPhong DATE NOT NULL,
+    NgayNhanPhong DATE NOT NULL,
+    GiaPhong INT NOT NULL,
+    CONSTRAINT PK_ChiTietDatPhong PRIMARY KEY (Phong, DatPhong),
+    CONSTRAINT FK_ChiTietDatPhong_Phong FOREIGN KEY (Phong) 
+    REFERENCES Phong(MaPhong),
+    CONSTRAINT FK_ChiTietDatPhong_DatPhong FOREIGN KEY (DatPhong)
+    REFERENCES DatPhong(MaDatPhong),
+    CONSTRAINT FK_ChiTietDatPhong_KhuyenMai FOREIGN KEY (KhuyenMai)
+    REFERENCES KhuyenMai(MaKhuyenMai)
+);
+
+CREATE TABLE ChiTietDichVu(
+    Phong INT,
+    DatPhong INT,
+    DichVu INT,
+    GiaDichVu INT NOT NULL,
+    NgaySuDung DATE DEFAULT(GETDATE()) NOT NULL,
+    CONSTRAINT PK_ChiTietDichVu PRIMARY KEY (Phong, DatPhong, DichVu),
+    CONSTRAINT FK_ChiTietDichVu_ChiTietDatPhong FOREIGN KEY (Phong, DatPhong)
+    REFERENCES ChiTietDatPhong(Phong, DatPhong),
+    CONSTRAINT FK_ChiTietDichVu_DichVu FOREIGN KEY (DichVu)
+    REFERENCES DichVu(MaDichVu)
+);
 
 -- Script xóa toàn bộ ràng buộc và bảng trong CSDL
 DECLARE @sql NVARCHAR(MAX) = N'';
