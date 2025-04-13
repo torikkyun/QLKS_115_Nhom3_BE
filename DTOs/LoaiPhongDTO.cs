@@ -19,7 +19,6 @@ namespace QLKS_115_Nhom3_BE.DTOs
 
     public class UpdateLoaiPhongDTO
     {
-        [Required(ErrorMessage = "Số giường là bắt buộc")]
         public int? SoGiuong { get; set; }
 
         [StringLength(100, ErrorMessage = "Ghi chú không vượt quá 100 ký tự")]
