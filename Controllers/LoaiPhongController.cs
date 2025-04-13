@@ -100,6 +100,5 @@ namespace QLKS_115_Nhom3_BE.Controllers
                 "DELETE FROM LoaiPhong WHERE MaLoaiPhong = @Id", new { Id = id });
             return NoContent();
         }
-
     }
 }
