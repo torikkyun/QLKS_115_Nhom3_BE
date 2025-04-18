@@ -3,11 +3,11 @@
   "WorkspaceRootPath": "E:\\QLKS_115_Nhom3_BE\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{875305B7-7AC1-54BD-9A66-06A8DB044847}|QLKS_115_Nhom3_BE.csproj|E:\\QLKS_115_Nhom3_BE\\controllers\\nhanviencontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{875305B7-7AC1-54BD-9A66-06A8DB044847}|QLKS_115_Nhom3_BE.csproj|e:\\qlks_115_nhom3_be\\controllers\\nhanviencontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{875305B7-7AC1-54BD-9A66-06A8DB044847}|QLKS_115_Nhom3_BE.csproj|solutionrelative:controllers\\nhanviencontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{875305B7-7AC1-54BD-9A66-06A8DB044847}|QLKS_115_Nhom3_BE.csproj|e:\\qlks_115_nhom3_be\\dtos\\nhanviendto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{875305B7-7AC1-54BD-9A66-06A8DB044847}|QLKS_115_Nhom3_BE.csproj|E:\\QLKS_115_Nhom3_BE\\dtos\\nhanviendto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{875305B7-7AC1-54BD-9A66-06A8DB044847}|QLKS_115_Nhom3_BE.csproj|solutionrelative:dtos\\nhanviendto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -54,8 +54,7 @@
               "RelativeToolTip": "DTOs\\NhanVienDTO.cs",
               "ViewState": "AQIAAAYAAAAAAAAAAAAowBsAAAApAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-16T03:05:03.853Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-16T03:05:03.853Z"
             },
             {
               "$type": "Document",
@@ -65,7 +64,7 @@
               "RelativeDocumentMoniker": "Controllers\\NhanVienController.cs",
               "ToolTip": "E:\\QLKS_115_Nhom3_BE\\Controllers\\NhanVienController.cs",
               "RelativeToolTip": "Controllers\\NhanVienController.cs",
-              "ViewState": "AQIAADAAAAAAAAAAAAAqwEIAAAAQAAAA",
+              "ViewState": "AQIAAEIAAAAAAAAAAAAAAEUAAAALAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-16T02:38:24.881Z",
               "EditorCaption": ""
