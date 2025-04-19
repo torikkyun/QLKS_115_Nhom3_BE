@@ -15,8 +15,6 @@ public partial class ChiTietDatPhong
 
     public DateOnly NgayNhanPhong { get; set; }
 
-    public int GiaPhong { get; set; }
-
     public virtual ICollection<ChiTietDichVu> ChiTietDichVus { get; set; } = new List<ChiTietDichVu>();
 
     public virtual DatPhong DatPhongNavigation { get; set; } = null!;

@@ -11,8 +11,6 @@ public partial class ChiTietDichVu
 
     public int DichVu { get; set; }
 
-    public int GiaDichVu { get; set; }
-
     public DateOnly NgaySuDung { get; set; }
 
     public virtual ChiTietDatPhong ChiTietDatPhong { get; set; } = null!;

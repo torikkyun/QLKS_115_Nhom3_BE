@@ -6,6 +6,8 @@ using System.Data;
 
 namespace QLKS_115_Nhom3_BE.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class NhanVienController : Controller
     {
         private readonly IDbConnection _db;
@@ -14,7 +16,42 @@ namespace QLKS_115_Nhom3_BE.Controllers
         {
             _db = db;
         }
-        [HttpGet("all")]
+        [HttpPost]
+        public async Task<ActionResult<NhanVienDTO>> Create([FromBody] CreateNhanVienDTO model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            // Kiểm tra trùng CCCD hoặc Email
+            var checkExistEmployee = await _db.QueryFirstOrDefaultAsync<CreateNhanVienDTO>(
+                "SELECT * FROM NhanVien WHERE CCCD = @Cccd OR SDT = @Sdt",
+                new { Cccd = model.Cccd, SDT = model.Sdt });
+
+            if (checkExistEmployee != null)
+                return BadRequest("CCCD hoặc SDT đã tồn tại");
+
+            // Thêm nhân viên và lấy MaNhanVien
+            var parameters = new DynamicParameters();
+            parameters.Add("@Ho", model.Ho);
+            parameters.Add("@Ten", model.Ten);
+            parameters.Add("@Email", model.Email);
+            parameters.Add("@Sdt", model.Sdt);
+            parameters.Add("@Cccd", model.Cccd);
+            parameters.Add("@MatKhau", model.MatKhau);
+            parameters.Add("@MaVaiTro", model.VaiTro);
+            parameters.Add("@MaNhanVien", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+            await _db.ExecuteAsync("sp_ThemNhanVien", parameters, commandType: CommandType.StoredProcedure);
+
+            // Trả về thông tin nhân viên vừa tạo
+            var nhanVienMoi = await _db.QueryFirstOrDefaultAsync<NhanVienDTO>(
+                "SELECT * FROM NhanVien WHERE MaNhanVien = @MaNhanVien",
+                new { MaNhanVien = parameters.Get<int>("@MaNhanVien") });
+
+            return Ok(nhanVienMoi);
+        }
+
+        [HttpGet]
         public async Task<ActionResult<PagedResult<NhanVienDTO>>> Get(int page = 1, int pageSize = 10)
         {
             var parameters = new DynamicParameters();

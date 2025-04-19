@@ -9,5 +9,7 @@ public partial class LoaiDichVuEnum
 
     public string TenLoai { get; set; } = null!;
 
+    public int GiaDichVu { get; set; }
+
     public virtual ICollection<DichVu> DichVus { get; set; } = new List<DichVu>();
 }
