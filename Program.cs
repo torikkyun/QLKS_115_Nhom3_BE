@@ -31,7 +31,7 @@ builder.Services.AddDbContext<DataQlks115Nhom3Context>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "QLKS_115_Nhom3", Version = "v1" });
 
     // Thêm cấu hình JWT Auth cho Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
