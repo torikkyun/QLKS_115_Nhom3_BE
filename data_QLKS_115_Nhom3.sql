@@ -1,11 +1,3 @@
-﻿USE data_QLKS_115_Nhom3;
-GO
-
-CREATE TABLE LoaiDichVuEnum (
-    Id TINYINT PRIMARY KEY,
-    TenLoai NVARCHAR(50) NOT NULL
-);
-
 INSERT INTO LoaiDichVuEnum (Id, TenLoai) VALUES 
 (1, N'Dịch vụ phòng'),
 (2, N'Dịch vụ ăn uống'),
@@ -14,160 +6,84 @@ INSERT INTO LoaiDichVuEnum (Id, TenLoai) VALUES
 (5, N'Dịch vụ giặt ủi'),
 (6, N'Dịch vụ khác');
 
-CREATE TABLE KieuKhuyenMaiEnum (
-    Id TINYINT PRIMARY KEY,
-    TenKieu NVARCHAR(50) NOT NULL
-);
-
 INSERT INTO KieuKhuyenMaiEnum (Id, TenKieu) VALUES 
 (1, N'Phần trăm'),
 (2, N'Giảm giá trực tiếp'),
 (3, N'Đặc biệt');
-
-CREATE TABLE TinhTrangPhongEnum (
-    Id TINYINT PRIMARY KEY,
-    TenTinhTrang NVARCHAR(50) NOT NULL
-);
 
 INSERT INTO TinhTrangPhongEnum (Id, TenTinhTrang) VALUES 
 (0, N'Đang sử dụng'),
 (1, N'Trống'),
 (2, N'Bảo trì');
 
-CREATE TABLE KhachHang(
-    MaKhachHang INT IDENTITY(1, 1) PRIMARY KEY,
-    Ho NVARCHAR(50) NOT NULL,
-    Ten NVARCHAR(20) NOT NULL,
-    Email NVARCHAR(50) NULL,
-    SDT VARCHAR(20) NOT NULL,
-    CCCD VARCHAR(20) UNIQUE
-);
+INSERT INTO VaiTro (TenVaiTro, GhiChu) VALUES 
+(N'Quản lý', NULL),
+(N'Lễ tân', NULL),
+(N'Phục vụ', NULL);
 
-CREATE TABLE VaiTro(
-    MaVaiTro INT IDENTITY(1, 1) PRIMARY KEY,
-    TenVaiTro NVARCHAR(50) NOT NULL,
-    GhiChu NVARCHAR(100) NULL
-);
+INSERT INTO LoaiPhong (SoGiuong, GhiChu, GiaPhong) VALUES 
+(1, N'Phòng đơn', 500000),
+(2, N'Phòng đôi', 700000),
+(3, N'Phòng gia đình', 1000000);
 
-CREATE TABLE LoaiPhong(
-    MaLoaiPhong INT IDENTITY(1, 1) PRIMARY KEY,
-    SoGiuong INT NOT NULL,
-    GhiChu NVARCHAR(100) NULL
-);
+INSERT INTO NhanVien (Ho, Ten, Email, SDT, CCCD, MatKhau, VaiTro) VALUES 
+(N'Nguyễn', N'Văn A', 'a@example.com', '0911111111', '111111111111', 'password', 1),
+(N'Trần', N'Thị B', 'b@example.com', '0922222222', '222222222222', 'password', 2),
+(N'Lê', N'Văn C', 'c@example.com', '0933333333', '333333333333', 'password', 2),
+(N'Phạm', N'Thị D', 'd@example.com', '0944444444', '444444444444', 'password', 3),
+(N'Hoàng', N'Văn E', 'e@example.com', '0955555555', '555555555555', 'password', 3);
 
-CREATE TABLE DichVu(
-    MaDichVu INT IDENTITY(1, 1) PRIMARY KEY,
-    TenDichVu NVARCHAR(50) NOT NULL,
-    LoaiDichVu TINYINT NOT NULL,
-    GhiChu NVARCHAR(100) NULL,
-    CONSTRAINT FK_DichVu_LoaiDichVu FOREIGN KEY (LoaiDichVu)
-    REFERENCES LoaiDichVuEnum(Id)
-);
+INSERT INTO Phong (SoPhong, TinhTrangPhong, LoaiPhong) VALUES 
+('101', 1, 1),
+('102', 1, 1),
+('201', 1, 2),
+('202', 1, 2),
+('301', 1, 3),
+('302', 1, 3);
 
-CREATE TABLE KhuyenMai(
-    MaKhuyenMai INT IDENTITY(1, 1) PRIMARY KEY,
-    TenKhuyenMai NVARCHAR(50) NOT NULL,
-    KieuKhuyenMai TINYINT NOT NULL,
-    MoTaKhuyenMai NVARCHAR(100) NOT NULL,
-    NgayBatDau DATE NOT NULL,
-    NgayKetThuc DATE NOT NULL,
-    GiaTriKhuyenMai INT NOT NULL,
-    GhiChu NVARCHAR(100) NULL,
-    CONSTRAINT FK_KhuyenMai_KieuKhuyenMai FOREIGN KEY (KieuKhuyenMai)
-    REFERENCES KieuKhuyenMaiEnum(Id)
-);
+INSERT INTO KhachHang (Ho, Ten, Email, SDT, CCCD)
+VALUES
+( N'Nguyễn',N'An', 'an.nguyen@gmail.com', '0912345678', '001234567890'),
+( N'Trần',	N'Bình', 'binh.tran@yahoo.com', '0987654321', '002345678901'),
+( N'Lê',	N'Chi', 'chi.le@outlook.com', '0901122334', '003456789012'),
+( N'Phạm',	N'Dương', 'duong.pham@gmail.com', '0933445566', '004567890123'),
+( N'Hoàng',	N'Lan', 'lan.hoang@hotmail.com', '0922334455', '005678901234'),
+( N'Đỗ',	N'Minh', 'minh.do@gmail.com', '0945566778', '006789012345'),
+( N'Vũ',	N'Ngọc', 'ngoc.vu@live.com', '0911223344', '007890123456'),
+( N'Bùi',	N'Phát', 'phat.bui@gmail.com', '0967788990', '008901234567'),
+( N'Đặng',	N'Quỳnh', 'quynh.dang@gmail.com', '0978899001', '009012345678'),
+( N'Lý',	N'Sơn', 'son.ly@gmail.com', '0956677889', '010123456789');
 
-CREATE TABLE NhanVien(
-    MaNhanVien INT IDENTITY(1, 1) PRIMARY KEY,
-    Ho NVARCHAR(50) NOT NULL,
-    Ten NVARCHAR(20) NOT NULL,
-    Email NVARCHAR(50) NULL,
-    SDT VARCHAR(20) NOT NULL,
-    CCCD VARCHAR(20) UNIQUE,
-    MatKhau NVARCHAR(50) NOT NULL,
-    VaiTro INT NOT NULL,
-    CONSTRAINT FK_NhanVien_VaiTro FOREIGN KEY (VaiTro)
-    REFERENCES VaiTro(MaVaiTro)
-);
+INSERT INTO DatPhong ( NgayDatPhong, SoPhongDat, GhiChu, NhanVien, KhachHang)
+VALUES 
+('2025-04-01',	201, 'Khách ở 2 đêm',     3, 1),
+('2025-04-02',	202, 'Khách quen',        4, 2),
+('2025-04-03',	203, 'Khách đoàn',        5, 3),
+('2025-04-04',	204, NULL,                3, 4),
+('2025-04-05',	205, NULL,                4, 5),
+('2025-04-06',	206, 'Check-in trễ',      3, 6),
+('2025-04-07',	207, 'Yêu cầu thêm gối',  4, 7),
+('2025-04-08',	208, NULL,                5, 8),
+('2025-04-09',	209, 'Khách VIP',         3, 9),
+('2025-04-10',  103, NULL,                4, 10)
 
-CREATE TABLE Phong(
-    MaPhong INT IDENTITY(1, 1) PRIMARY KEY,
-    SoPhong VARCHAR(5) NOT NULL,
-    TinhTrangPhong TINYINT NOT NULL,
-    LoaiPhong INT,
-    CONSTRAINT FK_Phong_LoaiPhong FOREIGN KEY (LoaiPhong)
-    REFERENCES LoaiPhong(MaLoaiPhong),
-    CONSTRAINT FK_Phong_TinhTrangPhong FOREIGN KEY (TinhTrangPhong)
-    REFERENCES TinhTrangPhongEnum(Id)
-);
 
-CREATE TABLE DatPhong(
-    MaDatPhong INT IDENTITY(1, 1) PRIMARY KEY,
-    NgayDatPhong DATE DEFAULT(GETDATE()) NOT NULL,
-    SoPhongDat INT NOT NULL,
-    GhiChu NVARCHAR(100) NULL,
-    NhanVien INT,
-    KhachHang INT,
-    CONSTRAINT FK_DatPhong_NhanVien FOREIGN KEY (NhanVien)
-    REFERENCES NhanVien(MaNhanVien),
-    CONSTRAINT FK_DatPhong_KhachHang FOREIGN KEY (KhachHang)
-    REFERENCES KhachHang(MaKhachHang)
-);
+INSERT INTO KhuyenMai (TenKhuyenMai, KieuKhuyenMai, MoTaKhuyenMai, NgayBatDau, NgayKetThuc, GiaTriKhuyenMai, GhiChu)
+VALUES
+(N'Khuyến mãi mùa hè',		1,	N'Giảm giá cho đặt phòng mùa hè', '2025-05-01', '2025-08-31', 15,			N'Áp dụng cho tất cả phòng'),
+(N'Khách hàng thân thiết',	2,	N'Giảm giá cho khách hàng thân thiết', '2025-01-01', '2025-12-31', 500000,	N'Áp dụng khi đặt từ 3 đêm trở lên'),
+(N'Combo gia đình',			3,	N'Ưu đãi đặt phòng cho gia đình', '2025-04-01', '2025-06-30', 20,			N'Áp dụng khi đặt từ 2 phòng trở lên')
 
-CREATE TABLE HoaDon(
-    DatPhong INT PRIMARY KEY,
-    NgayXuatHoaDon DATE DEFAULT(GETDATE()) NOT NULL,
-    TinhTrangThanhToan BIT NOT NULL,
-    TongTien INT NOT NULL,
-    TongTienPhong INT NOT NULL,
-    TongTienDichVu INT NOT NULL,
-    GhiChu NVARCHAR(100) NULL,
-    NhanVien INT,
-    CONSTRAINT FK_HoaDon_DatPhong FOREIGN KEY (DatPhong) 
-    REFERENCES DatPhong(MaDatPhong),
-    CONSTRAINT FK_HoaDon_NhanVien FOREIGN KEY (NhanVien) 
-    REFERENCES NhanVien(MaNhanVien)
-);
 
-CREATE TABLE ChiTietDatPhong(
-    Phong INT,
-    DatPhong INT,
-    KhuyenMai INT,
-    NgayTraPhong DATE NOT NULL,
-    NgayNhanPhong DATE NOT NULL,
-    GiaPhong INT NOT NULL,
-    CONSTRAINT PK_ChiTietDatPhong PRIMARY KEY (Phong, DatPhong),
-    CONSTRAINT FK_ChiTietDatPhong_Phong FOREIGN KEY (Phong) 
-    REFERENCES Phong(MaPhong),
-    CONSTRAINT FK_ChiTietDatPhong_DatPhong FOREIGN KEY (DatPhong)
-    REFERENCES DatPhong(MaDatPhong),
-    CONSTRAINT FK_ChiTietDatPhong_KhuyenMai FOREIGN KEY (KhuyenMai)
-    REFERENCES KhuyenMai(MaKhuyenMai)
-);
-
-CREATE TABLE ChiTietDichVu(
-    Phong INT,
-    DatPhong INT,
-    DichVu INT,
-    GiaDichVu INT NOT NULL,
-    NgaySuDung DATE DEFAULT(GETDATE()) NOT NULL,
-    CONSTRAINT PK_ChiTietDichVu PRIMARY KEY (Phong, DatPhong, DichVu),
-    CONSTRAINT FK_ChiTietDichVu_ChiTietDatPhong FOREIGN KEY (Phong, DatPhong)
-    REFERENCES ChiTietDatPhong(Phong, DatPhong),
-    CONSTRAINT FK_ChiTietDichVu_DichVu FOREIGN KEY (DichVu)
-    REFERENCES DichVu(MaDichVu)
-);
-
--- Script xóa toàn bộ ràng buộc và bảng trong CSDL
-DECLARE @sql NVARCHAR(MAX) = N'';
-SELECT @sql += N'ALTER TABLE ' + QUOTENAME(OBJECT_SCHEMA_NAME(parent_object_id))
-              + N'.' + QUOTENAME(OBJECT_NAME(parent_object_id))
-              + N' DROP CONSTRAINT ' + QUOTENAME(name) + N';'
-FROM sys.foreign_keys;
-EXEC sp_executesql @sql;
-SET @sql = N'';
-SELECT @sql += N'DROP TABLE ' + QUOTENAME(OBJECT_SCHEMA_NAME(object_id))
-              + N'.' + QUOTENAME(name) + N';'
-FROM sys.objects
-WHERE type = 'U';
-EXEC sp_executesql @sql;
+-- INSERT INTO ChiTietDatPhong (Phong, DatPhong, KhuyenMai, NgayTraPhong, NgayNhanPhong)
+-- VALUES
+-- (29, 11, NULL, '2025-04-03', '2025-04-01'),
+-- (28, 2, 4, '2025-04-04', '2025-04-02'),
+-- (27, 3, 2, '2025-04-06', '2025-04-03'),
+-- (26, 4, NULL, '2025-04-06', '2025-04-04'),
+-- (25, 5, NULL, '2025-04-06', '2025-04-05'),
+-- (24, 6, 4, '2025-04-08', '2025-04-06'),
+-- (23, 7, NULL, '2025-04-08', '2025-04-07'),
+-- (22, 8, 3, '2025-04-10', '2025-04-08'),
+-- (21, 9, NULL, '2025-04-11', '2025-04-09'),
+-- (30, 10, 2, '2025-04-12', '2025-04-10')
