@@ -48,7 +48,7 @@ namespace QLKS_115_Nhom3_BE.Controllers
                 return Unauthorized("Email hoặc mật khẩu không đúng");
             }
 
-            var token = _jwtHelper.GenerateToken(user.Email, user.VaiTro);
+            var token = _jwtHelper.GenerateToken(user.Email, user.VaiTro, user.MaNhanVien);
 
             return Ok(new
             {

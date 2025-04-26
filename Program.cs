@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using QLKS_115_Nhom3_BE;
 using QLKS_115_Nhom3_BE.Helpers;
 using QLKS_115_Nhom3_BE.Models;
 using QLKS_115_Nhom3_BE.Services;
@@ -14,6 +15,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddScoped<IKhachHangService, KhachHangService>();
+builder.Services.AddScoped<IDatPhongService, DatPhongService>();
 // Dành cho Dapper
 builder.Services.AddScoped<IDbConnection>(sp =>
 {
@@ -27,6 +30,16 @@ builder.Services.AddDbContext<DataQlks115Nhom3Context>(options =>
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+// Thêm dịch vụ CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
@@ -84,9 +97,10 @@ builder.Services.AddAuthentication(options =>
 // Thêm Authorization
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("QuanLy", policy => policy.RequireRole("1"));
-    options.AddPolicy("LeTan", policy => policy.RequireRole("2"));
+    options.AddPolicy("Quản Lý", policy => policy.RequireRole("1"));
+    options.AddPolicy("Nhân Viên", policy => policy.RequireRole("2"));
 });
+builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -95,9 +109,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("AllowAll");
 app.UseAuthentication();
-app.UseHttpsRedirection();
 app.UseAuthorization();
+app.UseMiddleware<CurrentUserMiddleware>();
+app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();
