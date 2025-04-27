@@ -196,3 +196,45 @@ BEGIN
 	SET @MaPhong = SCOPE_IDENTITY();
     RETURN 1;
 END
+
+-- Trigger để tự động cập nhật trạng thái phòng khi có chi tiết đặt phòng mới
+CREATE OR ALTER TRIGGER trg_ChiTietDatPhong_AfterInsert
+ON ChiTietDatPhong
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    UPDATE p
+    SET p.TinhTrangPhong = 0 -- Đang sử dụng
+    FROM Phong p
+    INNER JOIN inserted i ON p.MaPhong = i.Phong;
+END
+GO
+
+-- Trigger kiểm tra phòng trước khi đặt
+CREATE OR ALTER TRIGGER trg_ChiTietDatPhong_BeforeInsert
+ON ChiTietDatPhong
+INSTEAD OF INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    -- Kiểm tra phòng có sẵn không
+    IF EXISTS (
+        SELECT 1 
+        FROM inserted i
+        JOIN Phong p ON i.Phong = p.MaPhong
+        WHERE p.TinhTrangPhong != 1 -- 1 = Trống
+    )
+    BEGIN
+        RAISERROR('Phòng không khả dụng để đặt', 16, 1);
+        RETURN;
+    END
+    
+    -- Thêm dữ liệu nếu hợp lệ
+    INSERT INTO ChiTietDatPhong (Phong, DatPhong, KhuyenMai, NgayNhanPhong, NgayTraPhong)
+    SELECT Phong, DatPhong, KhuyenMai, NgayNhanPhong, NgayTraPhong
+    FROM inserted;
+END
+GO

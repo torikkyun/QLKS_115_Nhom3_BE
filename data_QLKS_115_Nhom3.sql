@@ -16,6 +16,13 @@ INSERT INTO TinhTrangPhongEnum (Id, TenTinhTrang) VALUES
 (1, N'Trống'),
 (2, N'Bảo trì');
 
+INSERT INTO TinhTrangThanhToanEnum (Id, TenTinhTrang) VALUES
+(1, N'Chưa thanh toán'),
+(2, N'Đã thanh toán'),
+(3, N'Đang xử lý'),
+(4, N'Hoàn tiền'),
+(5, N'Hủy bỏ');
+
 INSERT INTO VaiTro (TenVaiTro, GhiChu) VALUES 
 (N'Quản lý', NULL),
 (N'Lễ tân', NULL),
@@ -75,15 +82,15 @@ VALUES
 (N'Combo gia đình',			3,	N'Ưu đãi đặt phòng cho gia đình', '2025-04-01', '2025-06-30', 20,			N'Áp dụng khi đặt từ 2 phòng trở lên')
 
 
--- INSERT INTO ChiTietDatPhong (Phong, DatPhong, KhuyenMai, NgayTraPhong, NgayNhanPhong)
--- VALUES
--- (29, 11, NULL, '2025-04-03', '2025-04-01'),
--- (28, 2, 4, '2025-04-04', '2025-04-02'),
--- (27, 3, 2, '2025-04-06', '2025-04-03'),
--- (26, 4, NULL, '2025-04-06', '2025-04-04'),
--- (25, 5, NULL, '2025-04-06', '2025-04-05'),
--- (24, 6, 4, '2025-04-08', '2025-04-06'),
--- (23, 7, NULL, '2025-04-08', '2025-04-07'),
--- (22, 8, 3, '2025-04-10', '2025-04-08'),
--- (21, 9, NULL, '2025-04-11', '2025-04-09'),
--- (30, 10, 2, '2025-04-12', '2025-04-10')
+INSERT INTO ChiTietDatPhong (Phong, DatPhong, KhuyenMai, NgayTraPhong, NgayNhanPhong)
+VALUES
+(29, 11, NULL, '2025-04-03', '2025-04-01'),
+(28, 2, 4, '2025-04-04', '2025-04-02'),
+(27, 3, 2, '2025-04-06', '2025-04-03'),
+(26, 4, NULL, '2025-04-06', '2025-04-04'),
+(25, 5, NULL, '2025-04-06', '2025-04-05'),
+(24, 6, 4, '2025-04-08', '2025-04-06'),
+(23, 7, NULL, '2025-04-08', '2025-04-07'),
+(22, 8, 3, '2025-04-10', '2025-04-08'),
+(21, 9, NULL, '2025-04-11', '2025-04-09'),
+(30, 10, 2, '2025-04-12', '2025-04-10')

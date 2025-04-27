@@ -9,7 +9,7 @@ public partial class HoaDon
 
     public DateOnly NgayXuatHoaDon { get; set; }
 
-    public bool TinhTrangThanhToan { get; set; }
+    public byte TinhTrangThanhToan { get; set; }
 
     public int TongTien { get; set; }
 
@@ -24,4 +24,6 @@ public partial class HoaDon
     public virtual DatPhong DatPhongNavigation { get; set; } = null!;
 
     public virtual NhanVien? NhanVienNavigation { get; set; }
+
+    public virtual TinhTrangThanhToanEnum TinhTrangThanhToanNavigation { get; set; } = null!;
 }

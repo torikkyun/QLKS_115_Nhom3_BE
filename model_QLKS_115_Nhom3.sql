@@ -16,6 +16,11 @@ CREATE TABLE TinhTrangPhongEnum (
     TenTinhTrang NVARCHAR(50) NOT NULL
 );
 
+CREATE TABLE TinhTrangThanhToanEnum (
+    Id TINYINT PRIMARY KEY,
+    TenTinhTrang NVARCHAR(50) NOT NULL
+);
+
 CREATE TABLE KhachHang(
     MaKhachHang INT IDENTITY(1, 1) PRIMARY KEY,
     Ho NVARCHAR(50) NOT NULL,
@@ -141,16 +146,26 @@ CREATE TABLE ChiTietDichVu(
     REFERENCES DichVu(MaDichVu)
 );
 
+ALTER TABLE ChiTietDatPhong DROP COLUMN GiaPhong
+ALTER TABLE ChiTietDichVu DROP COLUMN GiaDichVu
+
+ALTER TABLE HoaDon
+ALTER COLUMN TinhTrangThanhToan TINYINT NOT NULL;
+ALTER TABLE HoaDon
+ADD CONSTRAINT FK_HoaDon_TinhTrangThanhToan 
+FOREIGN KEY (TinhTrangThanhToan) 
+REFERENCES TinhTrangThanhToanEnum(Id);
+
 -- Script xóa toàn bộ ràng buộc và bảng trong CSDL
-DECLARE @sql NVARCHAR(MAX) = N'';
-SELECT @sql += N'ALTER TABLE ' + QUOTENAME(OBJECT_SCHEMA_NAME(parent_object_id))
-              + N'.' + QUOTENAME(OBJECT_NAME(parent_object_id))
-              + N' DROP CONSTRAINT ' + QUOTENAME(name) + N';'
-FROM sys.foreign_keys;
-EXEC sp_executesql @sql;
-SET @sql = N'';
-SELECT @sql += N'DROP TABLE ' + QUOTENAME(OBJECT_SCHEMA_NAME(object_id))
-              + N'.' + QUOTENAME(name) + N';'
-FROM sys.objects
-WHERE type = 'U';
-EXEC sp_executesql @sql;
+-- DECLARE @sql NVARCHAR(MAX) = N'';
+-- SELECT @sql += N'ALTER TABLE ' + QUOTENAME(OBJECT_SCHEMA_NAME(parent_object_id))
+--               + N'.' + QUOTENAME(OBJECT_NAME(parent_object_id))
+--               + N' DROP CONSTRAINT ' + QUOTENAME(name) + N';'
+-- FROM sys.foreign_keys;
+-- EXEC sp_executesql @sql;
+-- SET @sql = N'';
+-- SELECT @sql += N'DROP TABLE ' + QUOTENAME(OBJECT_SCHEMA_NAME(object_id))
+--               + N'.' + QUOTENAME(name) + N';'
+-- FROM sys.objects
+-- WHERE type = 'U';
+-- EXEC sp_executesql @sql;
