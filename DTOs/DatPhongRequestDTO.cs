@@ -2,7 +2,7 @@
 {
     public class DatPhongRequestDTO
     {
-        public int MaPhong { get; set; }
+        public List<int> MaPhongs { get; set; }
         public DateOnly NgayNhanPhong { get; set; }
         public DateOnly NgayTraPhong { get; set; }
         public int? KhuyenMaiId { get; set; }
