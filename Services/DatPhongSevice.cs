@@ -27,57 +27,57 @@ namespace QLKS_115_Nhom3_BE.Services
 
         public async Task<int> DatPhongAsync(DatPhongRequestDTO request)
         {
-            // Lấy thông tin nhân viên từ context
             var nhanVien = _httpContextAccessor.HttpContext?.Items["CurrentNhanVien"] as NhanVien;
-
             if (nhanVien == null)
-            {
                 throw new Exception("Không xác định được nhân viên");
-            }
 
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                // Kiểm tra phòng có sẵn không
-                var phong = await _context.Phongs
-                    .Include(p => p.TinhTrangPhongNavigation)
-                    .FirstOrDefaultAsync(p => p.MaPhong == request.MaPhong);
+                // Kiểm tra tất cả phòng có sẵn không
+                var phongs = await _context.Phongs
+                    .Where(p => request.MaPhongs.Contains(p.MaPhong))
+                    .ToListAsync();
 
-                if (phong == null)
-                    throw new Exception("Phòng không tồn tại");
+                if (phongs.Count != request.MaPhongs.Count)
+                    throw new Exception("Một số phòng không tồn tại");
 
-                if (phong.TinhTrangPhong != 1) // 1 = Trống
-                    throw new Exception("Phòng không khả dụng để đặt");
+                var phongKhongKhaDung = phongs.FirstOrDefault(p => p.TinhTrangPhong != 1);
+                if (phongKhongKhaDung != null)
+                    throw new Exception($"Phòng {phongKhongKhaDung.SoPhong} không khả dụng");
 
-                // Bước 1: Tạo đặt phòng
+                // Tạo đặt phòng
                 var datPhong = new DatPhong
                 {
                     NgayDatPhong = DateOnly.FromDateTime(DateTime.Now),
-                    SoPhongDat = request.MaPhong,
+                    SoPhongDat = request.MaPhongs.Count, // Số lượng phòng đặt
                     GhiChu = request.GhiChu,
                     NhanVien = nhanVien.MaNhanVien,
-                    KhachHang = request.MaKhachHang, // Có thể thêm logic tìm hoặc tạo khách hàng
+                    KhachHang = request.MaKhachHang
                 };
 
                 _context.DatPhongs.Add(datPhong);
                 await _context.SaveChangesAsync();
 
-                // Bước 2: Tạo chi tiết đặt phòng
-                var chiTiet = new ChiTietDatPhong
+                // Tạo chi tiết cho từng phòng
+                foreach (var maPhong in request.MaPhongs)
                 {
-                    Phong = request.MaPhong,
-                    DatPhong = datPhong.MaDatPhong,
-                    KhuyenMai = request.KhuyenMaiId,
-                    NgayNhanPhong = request.NgayNhanPhong,
-                    NgayTraPhong = request.NgayTraPhong
-                };
+                    var chiTiet = new ChiTietDatPhong
+                    {
+                        Phong = maPhong,
+                        DatPhong = datPhong.MaDatPhong,
+                        KhuyenMai = request.KhuyenMaiId,
+                        NgayNhanPhong = request.NgayNhanPhong,
+                        NgayTraPhong = request.NgayTraPhong
+                    };
+                    _context.ChiTietDatPhongs.Add(chiTiet);
 
-                _context.ChiTietDatPhongs.Add(chiTiet);
+                    // Cập nhật trạng thái phòng
+                    var phong = phongs.First(p => p.MaPhong == maPhong);
+                    phong.TinhTrangPhong = 0;
+                }
 
-                // Bước 3: Cập nhật trạng thái phòng
-                phong.TinhTrangPhong = 0; // 0 = Đang sử dụng
                 await _context.SaveChangesAsync();
-
                 await transaction.CommitAsync();
 
                 await _hoaDonService.CreateHoaDonAsync(datPhong.MaDatPhong);
@@ -90,7 +90,5 @@ namespace QLKS_115_Nhom3_BE.Services
                 throw;
             }
         }
-
-        // Implement other methods here...
     }
 }

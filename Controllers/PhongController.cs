@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using QLKS_115_Nhom3_BE.DTOs;
 using QLKS_115_Nhom3_BE.Models;
 using System.Data;
+using System.Data.Common;
 
 namespace QLKS_115_Nhom3_BE.Controllers
 {
@@ -30,7 +31,7 @@ namespace QLKS_115_Nhom3_BE.Controllers
             }
             var parameters = new DynamicParameters();
             parameters.Add("@SoPhong", model.SoPhong);
-            parameters.Add("@LoaiPhong", model.LoaiPhong);
+            parameters.Add("@LoaiPhong", model.MaLoaiPhong);
             parameters.Add("@TinhTrangPhong", model.TinhTrangPhong);
             parameters.Add("@MaPhong", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
@@ -106,7 +107,7 @@ namespace QLKS_115_Nhom3_BE.Controllers
                 var parameters = new DynamicParameters();
                 parameters.Add("@Id", id);
                 parameters.Add("@SoPhong", string.IsNullOrWhiteSpace(model.SoPhong) ? currentRoom.SoPhong : model.SoPhong);
-                parameters.Add("@LoaiPhong", model.LoaiPhong == 0 ? currentRoom.LoaiPhong : model.LoaiPhong);
+                parameters.Add("@LoaiPhong", model.MaLoaiPhong == 0 ? currentRoom.MaLoaiPhong : model.MaLoaiPhong);
                
                 await _db.ExecuteAsync(
                     "sp_CapNhatPhong",
@@ -132,6 +133,23 @@ namespace QLKS_115_Nhom3_BE.Controllers
             await _db.ExecuteAsync(
                 "IF EXISTS (SELECT 1 FROM Phong WHERE MaPhong = @Id AND TinhTrangPhong != 0) DELETE FROM PHONG WHERE MaPhong = @Id", new { Id = id });
             return NoContent();
+        }
+
+        [HttpPost("loc-phong")]
+        public async Task<IActionResult> LocPhong([FromBody] LocPhongRequest request)
+        {
+            var parameters = new DynamicParameters();
+            // parameters.Add("@TinhTrangPhongId", request.TinhTrangPhong, DbType.Byte);
+            parameters.Add("@GiaPhongMin", request.GiaPhongMin, DbType.Int32);
+            parameters.Add("@GiaPhongMax", request.GiaPhongMax, DbType.Int32);
+
+            var result = await _db.QueryAsync<LocPhongDtoResponse>(
+                "sp_LocPhong",
+                parameters,
+                commandType: CommandType.StoredProcedure
+            );
+
+            return Ok(result);
         }
     }
 }

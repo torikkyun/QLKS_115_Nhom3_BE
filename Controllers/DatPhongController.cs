@@ -6,7 +6,7 @@ using QLKS_115_Nhom3_BE.Utilities;
 
 namespace QLKS_115_Nhom3_BE.Controllers
 {
-    [Authorize(Roles = "1")]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class DatPhongController : ControllerBase
