@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using QLKS_115_Nhom3_BE.DTOs;
 using QLKS_115_Nhom3_BE.Services;
-using QLKS_115_Nhom3_BE.Utilities;
 
 namespace QLKS_115_Nhom3_BE.Controllers
 {
