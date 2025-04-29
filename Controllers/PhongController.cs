@@ -80,7 +80,7 @@ namespace QLKS_115_Nhom3_BE.Controllers
         public async Task<ActionResult<PhongDTO>> Get(int id)
         {
             var result = await _db.QueryFirstOrDefaultAsync<PhongDTO>(
-                "SELECT SoPhong, TinhTrangPhong, LoaiPhong, SoGiuong, GhiChu FROM Phong AS p JOIN LoaiPhong AS lp on lp.MaLoaiPhong = p.LoaiPhong WHERE p.MaPhong = @Id",
+                "SELECT MaPhong, SoPhong, TinhTrangPhong, MaLoaiPhong, SoGiuong, GhiChu FROM Phong AS p JOIN LoaiPhong AS lp on lp.MaLoaiPhong = p.LoaiPhong WHERE p.MaPhong = @Id",
                 new { Id = id });
 
             return result == null ? NotFound() : Ok(result);
@@ -107,7 +107,7 @@ namespace QLKS_115_Nhom3_BE.Controllers
                 var parameters = new DynamicParameters();
                 parameters.Add("@Id", id);
                 parameters.Add("@SoPhong", string.IsNullOrWhiteSpace(model.SoPhong) ? currentRoom.SoPhong : model.SoPhong);
-                parameters.Add("@LoaiPhong", model.MaLoaiPhong == 0 ? currentRoom.MaLoaiPhong : model.MaLoaiPhong);
+                parameters.Add("@MaLoaiPhong", model.MaLoaiPhong == 0 ? currentRoom.MaLoaiPhong : model.MaLoaiPhong);
                
                 await _db.ExecuteAsync(
                     "sp_CapNhatPhong",
@@ -116,7 +116,7 @@ namespace QLKS_115_Nhom3_BE.Controllers
                 );
 
                 var updateRoom = await _db.QueryFirstOrDefaultAsync<PhongDTO>(
-                    "SELECT SoPhong, TinhTrangPhong, LoaiPhong, SoGiuong, GhiChu FROM Phong AS p JOIN LoaiPhong AS lp on lp.MaLoaiPhong = p.LoaiPhong WHERE p.MaPhong = @Id",
+                    "SELECT MaPhong, SoPhong, TinhTrangPhong, MaLoaiPhong, SoGiuong, GhiChu FROM Phong AS p JOIN LoaiPhong AS lp on lp.MaLoaiPhong = p.LoaiPhong WHERE p.MaPhong = @Id",
                     new { Id = id });
                 return Ok(updateRoom);
             }

@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QLKS_115_Nhom3_BE.DTOs;
 using QLKS_115_Nhom3_BE.Models;
-using QLKS_115_Nhom3_BE.Utilities;
 using System.Data;
-using System.Security.Claims;
 
 
 namespace QLKS_115_Nhom3_BE.Services
@@ -34,46 +32,69 @@ namespace QLKS_115_Nhom3_BE.Services
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                // Kiểm tra tất cả phòng có sẵn không
+                // 1. Kiểm tra và lấy danh sách phòng
+                var maPhongs = request.PhongDichVus.Select(p => p.MaPhong).ToList();
                 var phongs = await _context.Phongs
-                    .Where(p => request.MaPhongs.Contains(p.MaPhong))
+                    .Where(p => maPhongs.Contains(p.MaPhong))
                     .ToListAsync();
 
-                if (phongs.Count != request.MaPhongs.Count)
+                if (phongs.Count != maPhongs.Count)
                     throw new Exception("Một số phòng không tồn tại");
 
-                var phongKhongKhaDung = phongs.FirstOrDefault(p => p.TinhTrangPhong != 1);
-                if (phongKhongKhaDung != null)
-                    throw new Exception($"Phòng {phongKhongKhaDung.SoPhong} không khả dụng");
-
-                // Tạo đặt phòng
+                // 2. Tạo đặt phòng chính
                 var datPhong = new DatPhong
                 {
                     NgayDatPhong = DateOnly.FromDateTime(DateTime.Now),
-                    SoPhongDat = request.MaPhongs.Count, // Số lượng phòng đặt
+                    SoPhongDat = request.PhongDichVus.Count,
                     GhiChu = request.GhiChu,
                     NhanVien = nhanVien.MaNhanVien,
                     KhachHang = request.MaKhachHang
                 };
-
                 _context.DatPhongs.Add(datPhong);
                 await _context.SaveChangesAsync();
 
-                // Tạo chi tiết cho từng phòng
-                foreach (var maPhong in request.MaPhongs)
+                // 3. Xử lý từng phòng và dịch vụ
+                foreach (var phongDv in request.PhongDichVus)
                 {
-                    var chiTiet = new ChiTietDatPhong
+                    // 3.1. Kiểm tra trạng thái phòng
+                    var phong = phongs.First(p => p.MaPhong == phongDv.MaPhong);
+                    if (phong.TinhTrangPhong != 1)
+                        throw new Exception($"Phòng {phong.SoPhong} không khả dụng");
+
+                    // 3.2. Tạo chi tiết đặt phòng
+                    var chiTietDatPhong = new ChiTietDatPhong
                     {
-                        Phong = maPhong,
+                        Phong = phongDv.MaPhong,
                         DatPhong = datPhong.MaDatPhong,
                         KhuyenMai = request.KhuyenMaiId,
-                        NgayNhanPhong = request.NgayNhanPhong,
-                        NgayTraPhong = request.NgayTraPhong
+                        NgayNhanPhong = phongDv.NgayNhanPhong,
+                        NgayTraPhong = phongDv.NgayTraPhong
                     };
-                    _context.ChiTietDatPhongs.Add(chiTiet);
+                    _context.ChiTietDatPhongs.Add(chiTietDatPhong);
 
-                    // Cập nhật trạng thái phòng
-                    var phong = phongs.First(p => p.MaPhong == maPhong);
+                    // 3.3. Xử lý dịch vụ nếu có
+                    if (phongDv.DichVus != null && phongDv.DichVus.Any())
+                    {
+                        var dichVus = await _context.DichVus
+                            .Where(dv => phongDv.DichVus.Contains(dv.TenDichVu))
+                            .ToListAsync();
+
+                        if (dichVus.Count != phongDv.DichVus.Count)
+                            throw new Exception($"Một số dịch vụ không tồn tại cho phòng {phongDv.MaPhong}");
+
+                        foreach (var dichVu in dichVus)
+                        {
+                            _context.ChiTietDichVus.Add(new ChiTietDichVu
+                            {
+                                Phong = phongDv.MaPhong,
+                                DatPhong = datPhong.MaDatPhong,
+                                DichVu = dichVu.MaDichVu,
+                                NgaySuDung = phongDv.NgayNhanPhong
+                            });
+                        }
+                    }
+
+                    // 3.4. Cập nhật trạng thái phòng
                     phong.TinhTrangPhong = 0;
                 }
 
@@ -84,10 +105,10 @@ namespace QLKS_115_Nhom3_BE.Services
                 
                 return datPhong.MaDatPhong;
             }
-            catch
+            catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                throw;
+                throw new Exception($"Lỗi khi đặt phòng: {ex.Message}");
             }
         }
     }
