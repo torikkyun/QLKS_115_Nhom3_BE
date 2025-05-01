@@ -119,7 +119,7 @@ CREATE TABLE HoaDon(
 CREATE TABLE ChiTietDatPhong(
     Phong INT,
     DatPhong INT,
-    KhuyenMai INT ALLOW NULL,
+    KhuyenMai INT NULL,
     NgayTraPhong DATE NOT NULL,
     NgayNhanPhong DATE NOT NULL,
     GiaPhong INT NOT NULL,
