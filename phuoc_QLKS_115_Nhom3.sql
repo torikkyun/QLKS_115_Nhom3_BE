@@ -238,3 +238,68 @@ BEGIN
     FROM inserted;
 END
 GO
+
+-- sửa procedure
+ALTER PROCEDURE [dbo].[sp_LayDanhSachPhong]
+    @Page INT = 1,
+    @PageSize INT = 10
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Tính offset
+    DECLARE @Offset INT = (@Page - 1) * @PageSize;
+
+    -- Lấy dữ liệu phân trang
+	SELECT MaPhong, SoPhong, TinhTrangPhong, MaLoaiPhong, SoGiuong, GhiChu 
+	FROM Phong AS p JOIN LoaiPhong AS lp ON lp.MaLoaiPhong = p.LoaiPhong 
+    ORDER BY MaPhong
+    OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;
+
+    -- Trả tổng số bản ghi (nếu cần)
+    SELECT COUNT(*) AS TotalRecords
+    FROM [dbo].[Phong];
+END
+
+-- sửa cap nhật phòng
+ALTER PROCEDURE [dbo].[sp_CapNhatPhong]
+    @Id INT,
+    @SoPhong VARCHAR(5) = NULL,
+    @MaLoaiPhong INT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE Phong
+    SET 
+        SoPhong = ISNULL(@SoPhong, SoPhong),
+        LoaiPhong = CASE
+					WHEN @MaLoaiPhong IS NOT NULL AND EXISTS (SELECT 1 FROM LoaiPhong WHERE MaLoaiPhong = @MaLoaiPhong) 
+					THEN @MaLoaiPhong
+					ELSE LoaiPhong
+				END
+    WHERE MaPhong = @Id;
+END
+
+-- Sửa Danh sách nhân viên
+ALTER PROCEDURE [dbo].[sp_LayDanhSachNhanVien]
+    @Page INT = 1,
+    @PageSize INT = 10
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Tính offset
+    DECLARE @Offset INT = (@Page - 1) * @PageSize;
+
+    -- Lấy dữ liệu phân trang
+    SELECT *
+    FROM [dbo].[NhanVien] nv
+    
+    ORDER BY MaNhanVien
+    OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;
+
+    -- Trả tổng số bản ghi (nếu cần)
+    SELECT COUNT(*) AS TotalRecords
+    FROM [dbo].[NhanVien];
+END
