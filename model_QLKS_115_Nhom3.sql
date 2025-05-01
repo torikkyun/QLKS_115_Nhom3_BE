@@ -156,7 +156,7 @@ ADD CONSTRAINT FK_HoaDon_TinhTrangThanhToan
 FOREIGN KEY (TinhTrangThanhToan) 
 REFERENCES TinhTrangThanhToanEnum(Id);
 
--- Script xóa toàn bộ ràng buộc và bảng trong CSDL
+-- -- Script xóa toàn bộ ràng buộc và bảng trong CSDL
 -- DECLARE @sql NVARCHAR(MAX) = N'';
 -- SELECT @sql += N'ALTER TABLE ' + QUOTENAME(OBJECT_SCHEMA_NAME(parent_object_id))
 --               + N'.' + QUOTENAME(OBJECT_NAME(parent_object_id))
