@@ -8,8 +8,7 @@ INSERT INTO LoaiDichVuEnum (Id, TenLoai) VALUES
 
 INSERT INTO KieuKhuyenMaiEnum (Id, TenKieu) VALUES 
 (1, N'Phần trăm'),
-(2, N'Giảm giá trực tiếp'),
-(3, N'Đặc biệt');
+(2, N'Giảm giá trực tiếp');
 
 INSERT INTO TinhTrangPhongEnum (Id, TenTinhTrang) VALUES 
 (0, N'Đang sử dụng'),
@@ -28,10 +27,10 @@ INSERT INTO VaiTro (TenVaiTro, GhiChu) VALUES
 (N'Lễ tân', NULL),
 (N'Phục vụ', NULL);
 
-INSERT INTO LoaiPhong (SoGiuong, GhiChu, GiaPhong) VALUES 
-(1, N'Phòng đơn', 500000),
-(2, N'Phòng đôi', 700000),
-(3, N'Phòng gia đình', 1000000);
+INSERT INTO LoaiPhong (SoGiuong, GhiChu) VALUES 
+(1, N'Phòng đơn'),
+(2, N'Phòng đôi'),
+(3, N'Phòng gia đình');
 
 INSERT INTO NhanVien (Ho, Ten, Email, SDT, CCCD, MatKhau, VaiTro) VALUES 
 (N'Nguyễn', N'Văn A', 'a@example.com', '0911111111', '111111111111', 'password', 1),
@@ -61,36 +60,7 @@ VALUES
 ( N'Đặng',	N'Quỳnh', 'quynh.dang@gmail.com', '0978899001', '009012345678'),
 ( N'Lý',	N'Sơn', 'son.ly@gmail.com', '0956677889', '010123456789');
 
-INSERT INTO DatPhong ( NgayDatPhong, SoPhongDat, GhiChu, NhanVien, KhachHang)
-VALUES 
-('2025-04-01',	201, 'Khách ở 2 đêm',     3, 1),
-('2025-04-02',	202, 'Khách quen',        4, 2),
-('2025-04-03',	203, 'Khách đoàn',        5, 3),
-('2025-04-04',	204, NULL,                3, 4),
-('2025-04-05',	205, NULL,                4, 5),
-('2025-04-06',	206, 'Check-in trễ',      3, 6),
-('2025-04-07',	207, 'Yêu cầu thêm gối',  4, 7),
-('2025-04-08',	208, NULL,                5, 8),
-('2025-04-09',	209, 'Khách VIP',         3, 9),
-('2025-04-10',  103, NULL,                4, 10)
-
-
 INSERT INTO KhuyenMai (TenKhuyenMai, KieuKhuyenMai, MoTaKhuyenMai, NgayBatDau, NgayKetThuc, GiaTriKhuyenMai, GhiChu)
 VALUES
 (N'Khuyến mãi mùa hè',		1,	N'Giảm giá cho đặt phòng mùa hè', '2025-05-01', '2025-08-31', 15,			N'Áp dụng cho tất cả phòng'),
-(N'Khách hàng thân thiết',	2,	N'Giảm giá cho khách hàng thân thiết', '2025-01-01', '2025-12-31', 500000,	N'Áp dụng khi đặt từ 3 đêm trở lên'),
-(N'Combo gia đình',			3,	N'Ưu đãi đặt phòng cho gia đình', '2025-04-01', '2025-06-30', 20,			N'Áp dụng khi đặt từ 2 phòng trở lên')
-
-
-INSERT INTO ChiTietDatPhong (Phong, DatPhong, KhuyenMai, NgayTraPhong, NgayNhanPhong)
-VALUES
-(29, 11, NULL, '2025-04-03', '2025-04-01'),
-(28, 2, 4, '2025-04-04', '2025-04-02'),
-(27, 3, 2, '2025-04-06', '2025-04-03'),
-(26, 4, NULL, '2025-04-06', '2025-04-04'),
-(25, 5, NULL, '2025-04-06', '2025-04-05'),
-(24, 6, 4, '2025-04-08', '2025-04-06'),
-(23, 7, NULL, '2025-04-08', '2025-04-07'),
-(22, 8, 3, '2025-04-10', '2025-04-08'),
-(21, 9, NULL, '2025-04-11', '2025-04-09'),
-(30, 10, 2, '2025-04-12', '2025-04-10')
+(N'Khách hàng thân thiết',	2,	N'Giảm giá cho khách hàng thân thiết', '2025-01-01', '2025-12-31', 500000,	N'Áp dụng khi đặt từ 3 đêm trở lên');
