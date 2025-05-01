@@ -410,3 +410,4 @@ nunit-*.xml
 # Custom
 .vs
 .github
+*.tar
