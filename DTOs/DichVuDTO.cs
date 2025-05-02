@@ -5,8 +5,9 @@ namespace QLKS_115_Nhom3_BE.DTOs
     {
         public int MaDichVu { get; set; }
         public string TenDichVu { get; set; } = string.Empty;
-        public byte LoaiDichVu { get; set; }
         public string? GhiChu { get; set; }
+        public byte LoaiDichVu { get; set; }
+        public string? TenLoaiDichVu { get; set; }
     }
 
     public class CreateDichVuDTO

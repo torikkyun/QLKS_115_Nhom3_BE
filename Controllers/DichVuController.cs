@@ -18,11 +18,14 @@ namespace QLKS_115_Nhom3_BE.Controllers
         {
             _db = db;
         }
+
         // GET: api/DichVu
         [HttpGet]
         public async Task<ActionResult<PagedResult<DichVuDTO>>> Get(int page = 1, int pageSize = 10)
         {
-            var sql = "SELECT * FROM DichVu";
+            var sql = @"SELECT dv.*, ldv.TenLoai AS TenLoaiDichVu
+                FROM DichVu dv
+                LEFT JOIN LoaiDichVuEnum ldv ON dv.LoaiDichVu = ldv.Id";
             var result = await PaginationHelper.GetPagedDataAsync<DichVuDTO>(_db, sql, page, pageSize);
             return Ok(result);
         }
@@ -32,7 +35,10 @@ namespace QLKS_115_Nhom3_BE.Controllers
         public async Task<ActionResult<DichVuDTO>> Get(int id)
         {
             var result = await _db.QueryFirstOrDefaultAsync<DichVuDTO>(
-                "SELECT * FROM DichVu WHERE MaDichVu = @Id",
+                @"SELECT dv.*, ldv.TenLoai AS TenLoai 
+                FROM DichVu dv
+                LEFT JOIN LoaiDichVuEnum ldv ON dv.LoaiDichVu = ldv.Id
+                WHERE dv.MaDichVu = @Id",
                 new { Id = id });
 
             return result == null ? NotFound() : Ok(result);

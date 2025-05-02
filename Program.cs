@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Dapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -7,9 +8,10 @@ using QLKS_115_Nhom3_BE;
 using QLKS_115_Nhom3_BE.Helpers;
 using QLKS_115_Nhom3_BE.Models;
 using QLKS_115_Nhom3_BE.Services;
-using System;
 using System.Data;
 using System.Text;
+
+SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddScoped<IKhachHangService, KhachHangService>();
 builder.Services.AddScoped<IDatPhongService, DatPhongService>();
+builder.Services.AddScoped<HoaDonService>();
 // Dành cho Dapper
 builder.Services.AddScoped<IDbConnection>(sp =>
 {
@@ -42,7 +45,7 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "QLKS_115_Nhom3", Version = "v1" });
 
     // Thêm cấu hình JWT Auth cho Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -50,8 +53,9 @@ builder.Services.AddSwaggerGen(c =>
         Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
         Name = "Authorization",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT"
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement

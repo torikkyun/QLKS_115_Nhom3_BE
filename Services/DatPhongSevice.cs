@@ -14,11 +14,13 @@ namespace QLKS_115_Nhom3_BE.Services
     {
         private readonly DataQlks115Nhom3Context _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly HoaDonService _hoaDonService;
 
-        public DatPhongService(DataQlks115Nhom3Context context, IHttpContextAccessor httpContextAccessor)
+        public DatPhongService(DataQlks115Nhom3Context context, IHttpContextAccessor httpContextAccessor, HoaDonService hoaDonService)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
+            _hoaDonService = hoaDonService;
         }
 
         public async Task<int> DatPhongAsync(DatPhongRequestDTO request)
@@ -98,6 +100,9 @@ namespace QLKS_115_Nhom3_BE.Services
 
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
+
+                await _hoaDonService.CreateHoaDonAsync(datPhong.MaDatPhong);
+                
                 return datPhong.MaDatPhong;
             }
             catch (Exception ex)
