@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QLKS_115_Nhom3_BE.Helpers;
 using QLKS_115_Nhom3_BE.Models;
+using QLKS_115_Nhom3_BE.DTOs;
 
 namespace QLKS_115_Nhom3_BE.Controllers
 {
@@ -18,6 +19,7 @@ namespace QLKS_115_Nhom3_BE.Controllers
             _db = db;
         }
 
+        // POST: api/HoaDon/ThanhToan/{maDatPhong}
         [HttpPost("ThanhToan/{maDatPhong}")]
         public async Task<IActionResult> ThanhToanHoaDon(int maDatPhong)
         {
@@ -68,6 +70,26 @@ namespace QLKS_115_Nhom3_BE.Controllers
             {
                 return StatusCode(500, $"Lỗi server: {ex.Message}");
             }
+        }
+
+        // GET: api/HoaDon
+        [HttpGet]
+        public async Task<ActionResult<PagedResult<HoaDonDTO>>> Get(int page = 1, int pageSize = 10)
+        {
+            var sql = "SELECT * FROM HoaDon";
+            var result = await PaginationHelper.GetPagedDataAsync<HoaDonDTO>(_db, sql, page, pageSize);
+            return Ok(result);
+        }
+
+        // GET api/HoaDon/{id}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<HoaDonDTO>> Get(int id)
+        {
+            var result = await _db.QueryFirstOrDefaultAsync<HoaDonDTO>(
+                "SELECT * FROM HoaDon WHERE DatPhong = @Id",
+                new { Id = id });
+
+            return result == null ? NotFound() : Ok(result);
         }
     }
 }
