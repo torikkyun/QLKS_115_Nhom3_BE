@@ -20,5 +20,15 @@
         public int MaPhong { get; set; }
         public int MaDatPhong { get; set; }
     }
+    public class DatPhongFullDTO
+    {
+        public int MaDatPhong { get; set; }
+        public DateOnly NgayDatPhong { get; set; }
+        public int SoPhongDat { get; set; }
+        public string? GhiChu { get; set; }
+
+        public NhanVienDTO NhanVien { get; set; } = new();
+        public KhachHangDTO KhachHang { get; set; } = new();
+    }
 
 }

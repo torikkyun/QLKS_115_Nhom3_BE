@@ -47,5 +47,20 @@ namespace QLKS_115_Nhom3_BE.Controllers
                 return StatusCode(500, new { Message = "Lỗi khi trả phòng.", Details = ex.Message });
             }
         }
+
+        [HttpGet("danh-sach")]
+        public async Task<IActionResult> GetAllDatPhong()
+        {
+            try
+            {
+                var datPhongs = await _datPhongService.GetAllDatPhongsAsync();
+                return Ok(datPhongs);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "Lỗi khi lấy danh sách đặt phòng.", Details = ex.Message });
+            }
+        }
+
     }
 }

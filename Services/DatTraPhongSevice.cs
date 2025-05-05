@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Dapper;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using QLKS_115_Nhom3_BE.DTOs;
 using QLKS_115_Nhom3_BE.Models;
@@ -11,19 +12,24 @@ namespace QLKS_115_Nhom3_BE.Services
     {
         Task<int> DatPhongAsync(DatPhongRequestDTO request);
         Task<bool> TraPhongAsync(TraPhongRequestDTO request);
+        Task<IEnumerable<DatPhongFullDTO>> GetAllDatPhongsAsync();
+
     }
     public class DatPhongService : IDatPhongService
     {
         private readonly DataQlks115Nhom3Context _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly HoaDonService _hoaDonService;
+        private readonly string _connectionString;
 
-        public DatPhongService(DataQlks115Nhom3Context context, IHttpContextAccessor httpContextAccessor, HoaDonService hoaDonService)
+        public DatPhongService(DataQlks115Nhom3Context context, IHttpContextAccessor httpContextAccessor, HoaDonService hoaDonService, IConfiguration configuration)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
             _hoaDonService = hoaDonService;
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
+
 
         public async Task<int> DatPhongAsync(DatPhongRequestDTO request)
         {
@@ -145,5 +151,46 @@ namespace QLKS_115_Nhom3_BE.Services
             }
         }
 
+
+
+        public async Task<IEnumerable<DatPhongFullDTO>> GetAllDatPhongsAsync()
+        {
+            var query = await _context.DatPhongs
+                .Include(dp => dp.NhanVienNavigation)
+                .Include(dp => dp.KhachHangNavigation)
+                .OrderByDescending(dp => dp.MaDatPhong)
+                .ToListAsync();
+
+            var result = query.Select(dp => new DatPhongFullDTO
+            {
+                MaDatPhong = dp.MaDatPhong,
+                NgayDatPhong = dp.NgayDatPhong,
+                SoPhongDat = dp.SoPhongDat,
+                GhiChu = dp.GhiChu,
+
+                NhanVien = new NhanVienDTO
+                {
+                    MaNhanVien = dp.NhanVienNavigation.MaNhanVien,
+                    Ho = dp.NhanVienNavigation.Ho,
+                    Ten = dp.NhanVienNavigation.Ten,
+                    Email = dp.NhanVienNavigation.Email,
+                    Sdt = dp.NhanVienNavigation.Sdt,        
+                    Cccd = dp.NhanVienNavigation.Cccd,       
+                    VaiTro = dp.NhanVienNavigation.VaiTro
+                },
+
+                KhachHang = new KhachHangDTO
+                {
+                    MaKhachHang = dp.KhachHangNavigation.MaKhachHang,
+                    Ho = dp.KhachHangNavigation.Ho,
+                    Ten = dp.KhachHangNavigation.Ten,
+                    Email = dp.KhachHangNavigation.Email,
+                    Sdt = dp.KhachHangNavigation.Sdt,         
+                    Cccd = dp.KhachHangNavigation.Cccd    
+                }
+            });
+
+            return result;
+        }
     }
 }
