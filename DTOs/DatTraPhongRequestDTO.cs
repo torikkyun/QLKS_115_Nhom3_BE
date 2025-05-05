@@ -15,4 +15,10 @@
         public string? GhiChu { get; set; }
         public int MaKhachHang { get; set; }
     }
+    public class TraPhongRequestDTO
+    {
+        public int MaPhong { get; set; }
+        public int MaDatPhong { get; set; }
+    }
+
 }

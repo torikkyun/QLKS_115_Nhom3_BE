@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using QLKS_115_Nhom3_BE.DTOs;
 using QLKS_115_Nhom3_BE.Models;
 using System.Data;
@@ -9,6 +10,7 @@ namespace QLKS_115_Nhom3_BE.Services
     public interface IDatPhongService
     {
         Task<int> DatPhongAsync(DatPhongRequestDTO request);
+        Task<bool> TraPhongAsync(TraPhongRequestDTO request);
     }
     public class DatPhongService : IDatPhongService
     {
@@ -102,7 +104,7 @@ namespace QLKS_115_Nhom3_BE.Services
                 await transaction.CommitAsync();
 
                 await _hoaDonService.CreateHoaDonAsync(datPhong.MaDatPhong);
-                
+
                 return datPhong.MaDatPhong;
             }
             catch (Exception ex)
@@ -111,5 +113,37 @@ namespace QLKS_115_Nhom3_BE.Services
                 throw new Exception($"Lỗi khi đặt phòng: {ex.Message}");
             }
         }
+        public async Task<bool> TraPhongAsync(TraPhongRequestDTO request)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                // 1. Kiểm tra hóa đơn của mã đặt phòng đã thanh toán chưa
+                var hoaDon = await _context.HoaDons
+                    .FirstOrDefaultAsync(h => h.DatPhong == request.MaDatPhong && h.TinhTrangThanhToan == 2);
+
+                if (hoaDon == null)
+                    return false; // Hóa đơn chưa thanh toán hoặc không tồn tại
+
+                // 2. Tìm phòng và cập nhật trạng thái về 1 (trống)
+                var phong = await _context.Phongs.FindAsync(request.MaPhong);
+                if (phong == null)
+                    throw new Exception("Phòng không tồn tại.");
+
+                phong.TinhTrangPhong = 1;
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return true;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+
     }
 }
