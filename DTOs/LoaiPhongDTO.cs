@@ -7,6 +7,7 @@ namespace QLKS_115_Nhom3_BE.DTOs
         public int MaLoaiPhong { get; set; }
         public int SoGiuong { get; set; }
         public string? GhiChu { get; set; }
+        public int GiaPhong { get; set; }
     }
     public class CreateLoaiPhongDTO
     {
@@ -15,6 +16,8 @@ namespace QLKS_115_Nhom3_BE.DTOs
 
         [StringLength(100, ErrorMessage = "Ghi chú không vượt quá 100 ký tự")]
         public string? GhiChu { get; set; }
+
+        public int GiaPhong { get; set; }
     }
 
     public class UpdateLoaiPhongDTO
@@ -23,5 +26,7 @@ namespace QLKS_115_Nhom3_BE.DTOs
 
         [StringLength(100, ErrorMessage = "Ghi chú không vượt quá 100 ký tự")]
         public string? GhiChu { get; set; }
+
+        public int GiaPhong { get; set; }
     }
 }

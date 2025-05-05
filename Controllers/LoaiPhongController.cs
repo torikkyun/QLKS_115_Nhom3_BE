@@ -50,8 +50,8 @@ namespace QLKS_115_Nhom3_BE.Controllers
             }
             try
             {
-                var sql = @"INSERT INTO LoaiPhong (SoGiuong, GhiChu) 
-                        VALUES (@SoGiuong, @GhiChu);
+                var sql = @"INSERT INTO LoaiPhong (SoGiuong, GhiChu, GiaPhong) 
+                        VALUES (@SoGiuong, @GhiChu, @GiaPhong);
                         SELECT CAST(SCOPE_IDENTITY() as int)";
 
                 var id = await _db.ExecuteScalarAsync<int>(sql, model);
@@ -74,13 +74,14 @@ namespace QLKS_115_Nhom3_BE.Controllers
                 }
 
                 var sql = @"UPDATE LoaiPhong SET 
-                        SoGiuong = @SoGiuong, GhiChu = @Ghichu
+                        SoGiuong = @SoGiuong, GhiChu = @Ghichu, GiaPhong = @GiaPhong
                         WHERE MaLoaiPhong = @Id";
 
                 await _db.ExecuteAsync(sql, new
                 {
                     model.SoGiuong,
                     model.GhiChu,
+                    model.GiaPhong,
                     Id = id
                 });
 
