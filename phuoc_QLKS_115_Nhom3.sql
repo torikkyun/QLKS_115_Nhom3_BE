@@ -239,6 +239,28 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE [dbo].[sp_LocPhong]
+    @GiaPhongMin DECIMAL(18, 2) = NULL,
+    @GiaPhongMax DECIMAL(18, 2) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        p.MaPhong,
+        p.SoPhong,
+        lp.MaLoaiPhong,
+        lp.SoGiuong,
+        lp.GhiChu,
+        lp.GiaPhong
+    FROM Phong p
+    INNER JOIN TinhTrangPhongEnum ttp ON p.TinhTrangPhong = ttp.Id
+    INNER JOIN LoaiPhong lp ON p.LoaiPhong = lp.MaLoaiPhong
+    WHERE 
+        (@GiaPhongMin IS NULL OR lp.GiaPhong >= @GiaPhongMin)
+        AND (@GiaPhongMax IS NULL OR lp.GiaPhong <= @GiaPhongMax)
+END
+
 -- sửa procedure
 ALTER PROCEDURE [dbo].[sp_LayDanhSachPhong]
     @Page INT = 1,

@@ -411,3 +411,4 @@ nunit-*.xml
 .vs
 .github
 *.tar
+appsettings.json
