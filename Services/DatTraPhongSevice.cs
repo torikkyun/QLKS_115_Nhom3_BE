@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Dapper;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using QLKS_115_Nhom3_BE.DTOs;
 using QLKS_115_Nhom3_BE.Models;
 using System.Data;
@@ -9,19 +11,25 @@ namespace QLKS_115_Nhom3_BE.Services
     public interface IDatPhongService
     {
         Task<int> DatPhongAsync(DatPhongRequestDTO request);
+        Task<bool> TraPhongAsync(TraPhongRequestDTO request);
+        Task<IEnumerable<DatPhongFullDTO>> GetAllDatPhongsAsync();
+
     }
     public class DatPhongService : IDatPhongService
     {
         private readonly DataQlks115Nhom3Context _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly HoaDonService _hoaDonService;
+        private readonly string _connectionString;
 
-        public DatPhongService(DataQlks115Nhom3Context context, IHttpContextAccessor httpContextAccessor, HoaDonService hoaDonService)
+        public DatPhongService(DataQlks115Nhom3Context context, IHttpContextAccessor httpContextAccessor, HoaDonService hoaDonService, IConfiguration configuration)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
             _hoaDonService = hoaDonService;
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
+
 
         public async Task<int> DatPhongAsync(DatPhongRequestDTO request)
         {
@@ -102,7 +110,7 @@ namespace QLKS_115_Nhom3_BE.Services
                 await transaction.CommitAsync();
 
                 await _hoaDonService.CreateHoaDonAsync(datPhong.MaDatPhong);
-                
+
                 return datPhong.MaDatPhong;
             }
             catch (Exception ex)
@@ -110,6 +118,79 @@ namespace QLKS_115_Nhom3_BE.Services
                 await transaction.RollbackAsync();
                 throw new Exception($"Lỗi khi đặt phòng: {ex.Message}");
             }
+        }
+        public async Task<bool> TraPhongAsync(TraPhongRequestDTO request)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                // 1. Kiểm tra hóa đơn của mã đặt phòng đã thanh toán chưa
+                var hoaDon = await _context.HoaDons
+                    .FirstOrDefaultAsync(h => h.DatPhong == request.MaDatPhong && h.TinhTrangThanhToan == 2);
+
+                if (hoaDon == null)
+                    return false; // Hóa đơn chưa thanh toán hoặc không tồn tại
+
+                // 2. Tìm phòng và cập nhật trạng thái về 1 (trống)
+                var phong = await _context.Phongs.FindAsync(request.MaPhong);
+                if (phong == null)
+                    throw new Exception("Phòng không tồn tại.");
+
+                phong.TinhTrangPhong = 1;
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return true;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+
+
+
+        public async Task<IEnumerable<DatPhongFullDTO>> GetAllDatPhongsAsync()
+        {
+            var query = await _context.DatPhongs
+                .Include(dp => dp.NhanVienNavigation)
+                .Include(dp => dp.KhachHangNavigation)
+                .OrderByDescending(dp => dp.MaDatPhong)
+                .ToListAsync();
+
+            var result = query.Select(dp => new DatPhongFullDTO
+            {
+                MaDatPhong = dp.MaDatPhong,
+                NgayDatPhong = dp.NgayDatPhong,
+                SoPhongDat = dp.SoPhongDat,
+                GhiChu = dp.GhiChu,
+
+                NhanVien = new NhanVienDTO
+                {
+                    MaNhanVien = dp.NhanVienNavigation.MaNhanVien,
+                    Ho = dp.NhanVienNavigation.Ho,
+                    Ten = dp.NhanVienNavigation.Ten,
+                    Email = dp.NhanVienNavigation.Email,
+                    Sdt = dp.NhanVienNavigation.Sdt,        
+                    Cccd = dp.NhanVienNavigation.Cccd,       
+                    VaiTro = dp.NhanVienNavigation.VaiTro
+                },
+
+                KhachHang = new KhachHangDTO
+                {
+                    MaKhachHang = dp.KhachHangNavigation.MaKhachHang,
+                    Ho = dp.KhachHangNavigation.Ho,
+                    Ten = dp.KhachHangNavigation.Ten,
+                    Email = dp.KhachHangNavigation.Email,
+                    Sdt = dp.KhachHangNavigation.Sdt,         
+                    Cccd = dp.KhachHangNavigation.Cccd    
+                }
+            });
+
+            return result;
         }
     }
 }
