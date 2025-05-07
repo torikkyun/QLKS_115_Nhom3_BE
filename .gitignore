@@ -412,3 +412,4 @@ nunit-*.xml
 .github
 *.tar
 appsettings.json
+appsettings.Development.json
