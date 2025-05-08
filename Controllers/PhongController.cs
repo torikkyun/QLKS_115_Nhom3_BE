@@ -75,16 +75,22 @@ namespace QLKS_115_Nhom3_BE.Controllers
         }
 
 
+
+        // GET api/Phong/{id}
         // GET api/Phong/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<PhongDTO>> Get(int id)
         {
             var result = await _db.QueryFirstOrDefaultAsync<PhongDTO>(
-                "SELECT MaPhong, SoPhong, TinhTrangPhong, MaLoaiPhong, SoGiuong, GhiChu FROM Phong AS p JOIN LoaiPhong AS lp on lp.MaLoaiPhong = p.LoaiPhong WHERE p.MaPhong = @Id",
+                @"SELECT p.MaPhong, p.SoPhong, p.TinhTrangPhong, p.LoaiPhong AS MaLoaiPhong, lp.SoGiuong, lp.GhiChu, lp.GiaPhong 
+                FROM Phong AS p 
+                JOIN LoaiPhong AS lp ON lp.MaLoaiPhong = p.LoaiPhong 
+                WHERE p.MaPhong = @Id",
                 new { Id = id });
 
             return result == null ? NotFound() : Ok(result);
         }
+
 
         // PUT api/Phong/{id}
         [HttpPut("{id}")]
@@ -143,7 +149,7 @@ namespace QLKS_115_Nhom3_BE.Controllers
             parameters.Add("@GiaPhongMin", request.GiaPhongMin, DbType.Int32);
             parameters.Add("@GiaPhongMax", request.GiaPhongMax, DbType.Int32);
 
-            var result = await _db.QueryAsync<LocPhongDtoResponse>(
+            var result = await _db.QueryAsync<PhongDTO>(
                 "sp_LocPhong",
                 parameters,
                 commandType: CommandType.StoredProcedure

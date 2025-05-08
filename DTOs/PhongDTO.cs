@@ -17,9 +17,6 @@
         public int SoGiuong { get; set; }
 
         public string? GhiChu { get; set; }
-    }
-    public class LocPhongDtoResponse : PhongDTO
-    {
         public int GiaPhong { get; set; }
     }
 
