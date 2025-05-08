@@ -46,7 +46,8 @@ namespace QLKS_115_Nhom3_BE.Services
                 DECLARE @TongTienDichVu INT;
                 SELECT @TongTienDichVu = COALESCE(SUM(ldv.GiaDichVu), 0)
                 FROM ChiTietDichVu ctdv
-                JOIN LoaiDichVuEnum ldv ON ctdv.DichVu = ldv.Id
+                JOIN DichVu dv ON ctdv.DichVu = dv.MaDichVu
+                JOIN LoaiDichVuEnum ldv ON dv.LoaiDichVu = ldv.Id
                 WHERE ctdv.DatPhong = @MaDatPhong;
 
                 -- Tổng tiền hóa đơn
