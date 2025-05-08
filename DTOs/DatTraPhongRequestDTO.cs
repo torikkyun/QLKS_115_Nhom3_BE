@@ -3,7 +3,7 @@
     public class PhongDichVuDTO
     {
         public int MaPhong { get; set; }
-        public List<string>? DichVus { get; set; }
+        public List<int>? DichVuIds { get; set; }
         public DateOnly NgayNhanPhong { get; set; }
         public DateOnly NgayTraPhong { get; set; }
     }

@@ -80,17 +80,20 @@ namespace QLKS_115_Nhom3_BE.Services
                     };
                     _context.ChiTietDatPhongs.Add(chiTietDatPhong);
 
-                    // 3.3. Xử lý dịch vụ nếu có
-                    if (phongDv.DichVus != null && phongDv.DichVus.Any())
+                    // 3.3. Xử lý dịch vụ nếu có (sửa lại phần này)
+                    if (phongDv.DichVuIds != null && phongDv.DichVuIds.Any())
                     {
-                        var dichVus = await _context.DichVus
-                            .Where(dv => phongDv.DichVus.Contains(dv.TenDichVu))
+                        // Lấy danh sách dịch vụ hợp lệ
+                        var validDichVus = await _context.DichVus
+                            .Where(dv => phongDv.DichVuIds.Contains(dv.MaDichVu))
                             .ToListAsync();
 
-                        if (dichVus.Count != phongDv.DichVus.Count)
-                            throw new Exception($"Một số dịch vụ không tồn tại cho phòng {phongDv.MaPhong}");
+                        // Kiểm tra xem có dịch vụ không tồn tại không
+                        var invalidIds = phongDv.DichVuIds.Except(validDichVus.Select(dv => dv.MaDichVu));
+                        if (invalidIds.Any())
+                            throw new Exception($"Không tìm thấy dịch vụ với mã: {string.Join(", ", invalidIds)}");
 
-                        foreach (var dichVu in dichVus)
+                        foreach (var dichVu in validDichVus)
                         {
                             _context.ChiTietDichVus.Add(new ChiTietDichVu
                             {
