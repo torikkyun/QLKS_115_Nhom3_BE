@@ -20,6 +20,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IKhachHangService, KhachHangService>();
 builder.Services.AddScoped<IDatPhongService, DatPhongService>();
 builder.Services.AddScoped<HoaDonService>();
+
 // Dành cho Dapper
 builder.Services.AddScoped<IDbConnection>(sp =>
 {
@@ -106,6 +107,13 @@ builder.Services.AddAuthorization(options =>
 });
 builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<DataQlks115Nhom3Context>();
+    DataSeeder.Seed(context);
+}
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();

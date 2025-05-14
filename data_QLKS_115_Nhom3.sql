@@ -1,4 +1,4 @@
-INSERT INTO LoaiDichVuEnum (Id, TenLoai) VALUES 
+INSERT INTO LoaiDichVuEnum (Id, TenLoai) VALUES
 (1, N'Dịch vụ phòng'),
 (2, N'Dịch vụ ăn uống'),
 (3, N'Dịch vụ giải trí'),
@@ -6,11 +6,11 @@ INSERT INTO LoaiDichVuEnum (Id, TenLoai) VALUES
 (5, N'Dịch vụ giặt ủi'),
 (6, N'Dịch vụ khác');
 
-INSERT INTO KieuKhuyenMaiEnum (Id, TenKieu) VALUES 
+INSERT INTO KieuKhuyenMaiEnum (Id, TenKieu) VALUES
 (1, N'Phần trăm'),
 (2, N'Giảm giá trực tiếp');
 
-INSERT INTO TinhTrangPhongEnum (Id, TenTinhTrang) VALUES 
+INSERT INTO TinhTrangPhongEnum (Id, TenTinhTrang) VALUES
 (0, N'Đang sử dụng'),
 (1, N'Trống'),
 (2, N'Bảo trì');
@@ -22,24 +22,24 @@ INSERT INTO TinhTrangThanhToanEnum (Id, TenTinhTrang) VALUES
 (4, N'Hoàn tiền'),
 (5, N'Hủy bỏ');
 
-INSERT INTO VaiTro (TenVaiTro, GhiChu) VALUES 
+INSERT INTO VaiTro (TenVaiTro, GhiChu) VALUES
 (N'Quản lý', NULL),
 (N'Lễ tân', NULL),
 (N'Phục vụ', NULL);
 
-INSERT INTO LoaiPhong (SoGiuong, GhiChu) VALUES 
+INSERT INTO LoaiPhong (SoGiuong, GhiChu) VALUES
 (1, N'Phòng đơn'),
 (2, N'Phòng đôi'),
 (3, N'Phòng gia đình');
 
-INSERT INTO NhanVien (Ho, Ten, Email, SDT, CCCD, MatKhau, VaiTro) VALUES 
+INSERT INTO NhanVien (Ho, Ten, Email, SDT, CCCD, MatKhau, VaiTro) VALUES
 (N'Nguyễn', N'Văn A', 'a@example.com', '0911111111', '111111111111', 'password', 1),
 (N'Trần', N'Thị B', 'b@example.com', '0922222222', '222222222222', 'password', 2),
 (N'Lê', N'Văn C', 'c@example.com', '0933333333', '333333333333', 'password', 2),
 (N'Phạm', N'Thị D', 'd@example.com', '0944444444', '444444444444', 'password', 3),
 (N'Hoàng', N'Văn E', 'e@example.com', '0955555555', '555555555555', 'password', 3);
 
-INSERT INTO Phong (SoPhong, TinhTrangPhong, LoaiPhong) VALUES 
+INSERT INTO Phong (SoPhong, TinhTrangPhong, LoaiPhong) VALUES
 ('101', 1, 1),
 ('102', 1, 1),
 ('201', 1, 2),

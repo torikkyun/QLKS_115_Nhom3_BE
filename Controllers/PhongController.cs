@@ -108,7 +108,7 @@ namespace QLKS_115_Nhom3_BE.Controllers
                 parameters.Add("@Id", id);
                 parameters.Add("@SoPhong", string.IsNullOrWhiteSpace(model.SoPhong) ? currentRoom.SoPhong : model.SoPhong);
                 parameters.Add("@MaLoaiPhong", model.MaLoaiPhong == 0 ? currentRoom.MaLoaiPhong : model.MaLoaiPhong);
-                
+
                 await _db.ExecuteAsync(
                     "sp_CapNhatPhong",
                     parameters,
