@@ -23,9 +23,9 @@ namespace QLKS_115_Nhom3_BE.Controllers
         [HttpGet]
         public async Task<ActionResult<PagedResult<DichVuDTO>>> Get(int page = 1, int pageSize = 10)
         {
-            var sql = @"SELECT dv.*, ldv.TenLoai AS TenLoaiDichVu
-                FROM DichVu dv
-                LEFT JOIN LoaiDichVuEnum ldv ON dv.LoaiDichVu = ldv.Id";
+            var sql = @"SELECT dv.MaDichVu, dv.TenDichVu, dv.GhiChu, ldv.TenLoai AS TenLoaiDichVu, ldv.GiaDichVu
+            FROM DichVu dv
+            LEFT JOIN LoaiDichVuEnum ldv ON dv.LoaiDichVu = ldv.Id";
             var result = await PaginationHelper.GetPagedDataAsync<DichVuDTO>(_db, sql, page, pageSize);
             return Ok(result);
         }
@@ -35,7 +35,7 @@ namespace QLKS_115_Nhom3_BE.Controllers
         public async Task<ActionResult<DichVuDTO>> Get(int id)
         {
             var result = await _db.QueryFirstOrDefaultAsync<DichVuDTO>(
-                @"SELECT dv.*, ldv.TenLoai AS TenLoai 
+                @"SELECT dv.MaDichVu, dv.TenDichVu, dv.GhiChu, ldv.TenLoai AS TenLoaiDichVu, ldv.GiaDichVu
                 FROM DichVu dv
                 LEFT JOIN LoaiDichVuEnum ldv ON dv.LoaiDichVu = ldv.Id
                 WHERE dv.MaDichVu = @Id",
@@ -54,7 +54,7 @@ namespace QLKS_115_Nhom3_BE.Controllers
             }
             try
             {
-                var sql = @"INSERT INTO DichVu (TenDichVu, LoaiDichVu, GhiChu) 
+                var sql = @"INSERT INTO DichVu (TenDichVu, LoaiDichVu, GhiChu)
                         VALUES (@TenDichVu, @LoaiDichVu, @GhiChu);
                         SELECT CAST(SCOPE_IDENTITY() as int)";
 
@@ -78,7 +78,7 @@ namespace QLKS_115_Nhom3_BE.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var sql = @"UPDATE DichVu SET 
+                var sql = @"UPDATE DichVu SET
                         TenDichVu = @TenDichVu, LoaiDichVu = @LoaiDichVu, GhiChu = @Ghichu
                         WHERE MaDichVu = @Id";
 
@@ -102,9 +102,16 @@ namespace QLKS_115_Nhom3_BE.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _db.ExecuteAsync(
-                "DELETE FROM DichVu WHERE MaDichVu = @Id", new { Id = id });
-            return NoContent();
+            try
+            {
+                await _db.ExecuteAsync(
+                    "DELETE FROM DichVu WHERE MaDichVu = @Id", new { Id = id });
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "Không thể xóa dịch vụ này vì đang được sử dụng." });
+            }
         }
     }
 }

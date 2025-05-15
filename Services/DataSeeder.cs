@@ -21,6 +21,61 @@ namespace QLKS_115_Nhom3_BE.Services
               context.SaveChanges();
           }
 
+          if (!context.DichVus.Any())
+          {
+              context.DichVus.AddRange(
+                  new DichVu
+                  {
+                      TenDichVu = "Dọn phòng",
+                      LoaiDichVu = 1,
+                      GhiChu = "Dịch vụ dọn dẹp phòng"
+                  },
+                  new DichVu
+                  {
+                      TenDichVu = "Giặt ủi",
+                      LoaiDichVu = 5,
+                      GhiChu = "Dịch vụ giặt ủi quần áo"
+                  },
+                  new DichVu
+                  {
+                      TenDichVu = "Đồ ăn sáng",
+                      LoaiDichVu = 2,
+                      GhiChu = "Bữa sáng tự chọn"
+                  },
+                  new DichVu
+                  {
+                      TenDichVu = "Đồ ăn trưa",
+                      LoaiDichVu = 2,
+                      GhiChu = "Bữa trưa tự chọn"
+                  },
+                  new DichVu
+                  {
+                      TenDichVu = "Đồ ăn tối",
+                      LoaiDichVu = 2,
+                      GhiChu = "Bữa tối tự chọn"
+                  },
+                  new DichVu
+                  {
+                      TenDichVu = "Massage",
+                      LoaiDichVu = 4,
+                      GhiChu = "Dịch vụ massage thư giãn"
+                  },
+                  new DichVu
+                  {
+                      TenDichVu = "Karaoke",
+                      LoaiDichVu = 3,
+                      GhiChu = "Dịch vụ karaoke"
+                  },
+                  new DichVu
+                  {
+                      TenDichVu = "Thuê xe",
+                      LoaiDichVu = 6,
+                      GhiChu = "Dịch vụ thuê xe tự lái"
+                  }
+              );
+              context.SaveChanges();
+          }
+
           if (!context.KieuKhuyenMaiEnums.Any())
           {
               context.KieuKhuyenMaiEnums.AddRange(

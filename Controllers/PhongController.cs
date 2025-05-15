@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using QLKS_115_Nhom3_BE.DTOs;
 using QLKS_115_Nhom3_BE.Models;
+using QLKS_115_Nhom3_BE.Helpers;
 using System.Data;
 using System.Data.Common;
 
@@ -46,32 +47,40 @@ namespace QLKS_115_Nhom3_BE.Controllers
             return Ok(phongMoi);
         }
 
+        // GET api/Phong
         [HttpGet]
         public async Task<ActionResult<PagedResult<PhongDTO>>> Get(int page = 1, int pageSize = 10)
         {
-            var parameters = new DynamicParameters();
-            parameters.Add("@Page", page);
-            parameters.Add("@PageSize", pageSize);
+            var sql = @"SELECT p.MaPhong, p.SoPhong, ttp.TenTinhTrang, lp.SoGiuong, lp.GhiChu, lp.GiaPhong
+                FROM Phong p
+                LEFT JOIN TinhTrangPhongEnum ttp ON p.TinhTrangPhong = ttp.Id
+                LEFT JOIN LoaiPhong lp ON p.LoaiPhong = lp.MaLoaiPhong";
 
-            using var multi = await _db.QueryMultipleAsync(
-                "sp_LayDanhSachPhong",
-                param: parameters,
-                commandType: CommandType.StoredProcedure
-            );
-
-            var data = (await multi.ReadAsync<PhongDTO>()).ToList();
-            var totalRecords = await multi.ReadFirstAsync<int>();
-
-            var result = new PagedResult<PhongDTO>
-            {
-                TotalRecords = totalRecords,
-                Page = page,
-                PageSize = pageSize,
-                TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize),
-                Data = data
-            };
-
+            var result = await PaginationHelper.GetPagedDataAsync<PhongDTO>(_db, sql, page, pageSize);
             return Ok(result);
+            // var parameters = new DynamicParameters();
+            // parameters.Add("@Page", page);
+            // parameters.Add("@PageSize", pageSize);
+
+            // using var multi = await _db.QueryMultipleAsync(
+            //     "sp_LayDanhSachPhong",
+            //     param: parameters,
+            //     commandType: CommandType.StoredProcedure
+            // );
+
+            // var data = (await multi.ReadAsync<PhongDTO>()).ToList();
+            // var totalRecords = await multi.ReadFirstAsync<int>();
+
+            // var result = new PagedResult<PhongDTO>
+            // {
+            //     TotalRecords = totalRecords,
+            //     Page = page,
+            //     PageSize = pageSize,
+            //     TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize),
+            //     Data = data
+            // };
+
+            // return Ok(result);
         }
 
 
@@ -80,7 +89,11 @@ namespace QLKS_115_Nhom3_BE.Controllers
         public async Task<ActionResult<PhongDTO>> Get(int id)
         {
             var result = await _db.QueryFirstOrDefaultAsync<PhongDTO>(
-                "SELECT MaPhong, SoPhong, TinhTrangPhong, MaLoaiPhong, SoGiuong, GhiChu FROM Phong AS p JOIN LoaiPhong AS lp on lp.MaLoaiPhong = p.LoaiPhong WHERE p.MaPhong = @Id",
+                @"SELECT p.MaPhong, p.SoPhong, ttp.TenTinhTrang, lp.SoGiuong, lp.GhiChu, lp.GiaPhong
+                FROM Phong p
+                LEFT JOIN TinhTrangPhongEnum ttp ON p.TinhTrangPhong = ttp.Id
+                LEFT JOIN LoaiPhong lp ON p.LoaiPhong = lp.MaLoaiPhong
+                WHERE p.MaPhong = @Id",
                 new { Id = id });
 
             return result == null ? NotFound() : Ok(result);
@@ -130,9 +143,17 @@ namespace QLKS_115_Nhom3_BE.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _db.ExecuteAsync(
-                "IF EXISTS (SELECT 1 FROM Phong WHERE MaPhong = @Id AND TinhTrangPhong != 0) DELETE FROM PHONG WHERE MaPhong = @Id", new { Id = id });
-            return NoContent();
+            try
+            {
+                await _db.ExecuteAsync(
+                    "IF EXISTS (SELECT 1 FROM Phong WHERE MaPhong = @Id AND TinhTrangPhong != 0) DELETE FROM PHONG WHERE MaPhong = @Id", new { Id = id });
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "Không thể xóa phòng này vì đang được sử dụng." });
+            }
+
         }
 
         [HttpPost("loc-phong")]
