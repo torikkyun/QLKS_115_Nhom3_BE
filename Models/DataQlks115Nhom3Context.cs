@@ -96,7 +96,7 @@ public partial class DataQlks115Nhom3Context : DbContext
 
         modelBuilder.Entity<DatPhong>(entity =>
         {
-            entity.HasKey(e => e.MaDatPhong).HasName("PK__DatPhong__6344ADEA3E90A27E");
+            entity.HasKey(e => e.MaDatPhong).HasName("PK__DatPhong__6344ADEAF41A1D46");
 
             entity.ToTable("DatPhong");
 
@@ -114,7 +114,7 @@ public partial class DataQlks115Nhom3Context : DbContext
 
         modelBuilder.Entity<DichVu>(entity =>
         {
-            entity.HasKey(e => e.MaDichVu).HasName("PK__DichVu__C0E6DE8F21A6AD4E");
+            entity.HasKey(e => e.MaDichVu).HasName("PK__DichVu__C0E6DE8F59680969");
 
             entity.ToTable("DichVu");
 
@@ -129,7 +129,7 @@ public partial class DataQlks115Nhom3Context : DbContext
 
         modelBuilder.Entity<HoaDon>(entity =>
         {
-            entity.HasKey(e => e.DatPhong).HasName("PK__HoaDon__2192D071F682357B");
+            entity.HasKey(e => e.DatPhong).HasName("PK__HoaDon__2192D07110F83630");
 
             entity.ToTable("HoaDon");
 
@@ -154,11 +154,11 @@ public partial class DataQlks115Nhom3Context : DbContext
 
         modelBuilder.Entity<KhachHang>(entity =>
         {
-            entity.HasKey(e => e.MaKhachHang).HasName("PK__KhachHan__88D2F0E5DC52706C");
+            entity.HasKey(e => e.MaKhachHang).HasName("PK__KhachHan__88D2F0E567826912");
 
             entity.ToTable("KhachHang");
 
-            entity.HasIndex(e => e.Cccd, "UQ__KhachHan__A955A0AA7443CAD7").IsUnique();
+            entity.HasIndex(e => e.Cccd, "UQ__KhachHan__A955A0AA971B67C9").IsUnique();
 
             entity.Property(e => e.Cccd)
                 .HasMaxLength(20)
@@ -175,7 +175,7 @@ public partial class DataQlks115Nhom3Context : DbContext
 
         modelBuilder.Entity<KhuyenMai>(entity =>
         {
-            entity.HasKey(e => e.MaKhuyenMai).HasName("PK__KhuyenMa__6F56B3BD93869F64");
+            entity.HasKey(e => e.MaKhuyenMai).HasName("PK__KhuyenMa__6F56B3BD4327F502");
 
             entity.ToTable("KhuyenMai");
 
@@ -191,7 +191,7 @@ public partial class DataQlks115Nhom3Context : DbContext
 
         modelBuilder.Entity<KieuKhuyenMaiEnum>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__KieuKhuy__3214EC07D1A5FEF2");
+            entity.HasKey(e => e.Id).HasName("PK__KieuKhuy__3214EC077B07D2BA");
 
             entity.ToTable("KieuKhuyenMaiEnum");
 
@@ -200,7 +200,7 @@ public partial class DataQlks115Nhom3Context : DbContext
 
         modelBuilder.Entity<LoaiDichVuEnum>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__LoaiDich__3214EC072EE5292B");
+            entity.HasKey(e => e.Id).HasName("PK__LoaiDich__3214EC078B2CF4A6");
 
             entity.ToTable("LoaiDichVuEnum");
 
@@ -209,7 +209,7 @@ public partial class DataQlks115Nhom3Context : DbContext
 
         modelBuilder.Entity<LoaiPhong>(entity =>
         {
-            entity.HasKey(e => e.MaLoaiPhong).HasName("PK__LoaiPhon__23021217759827BF");
+            entity.HasKey(e => e.MaLoaiPhong).HasName("PK__LoaiPhon__23021217FD7C3899");
 
             entity.ToTable("LoaiPhong");
 
@@ -218,11 +218,11 @@ public partial class DataQlks115Nhom3Context : DbContext
 
         modelBuilder.Entity<NhanVien>(entity =>
         {
-            entity.HasKey(e => e.MaNhanVien).HasName("PK__NhanVien__77B2CA477FEB2252");
+            entity.HasKey(e => e.MaNhanVien).HasName("PK__NhanVien__77B2CA478B954729");
 
             entity.ToTable("NhanVien");
 
-            entity.HasIndex(e => e.Cccd, "UQ__NhanVien__A955A0AA7EBDFED0").IsUnique();
+            entity.HasIndex(e => e.Cccd, "UQ__NhanVien__A955A0AA6D3854E8").IsUnique();
 
             entity.Property(e => e.Cccd)
                 .HasMaxLength(20)
@@ -245,7 +245,7 @@ public partial class DataQlks115Nhom3Context : DbContext
 
         modelBuilder.Entity<Phong>(entity =>
         {
-            entity.HasKey(e => e.MaPhong).HasName("PK__Phong__20BD5E5BDC98ADFB");
+            entity.HasKey(e => e.MaPhong).HasName("PK__Phong__20BD5E5B78B55026");
 
             entity.ToTable("Phong");
 
@@ -269,7 +269,7 @@ public partial class DataQlks115Nhom3Context : DbContext
 
         modelBuilder.Entity<TinhTrangPhongEnum>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__TinhTran__3214EC0741DA6BEF");
+            entity.HasKey(e => e.Id).HasName("PK__TinhTran__3214EC076E98A0E3");
 
             entity.ToTable("TinhTrangPhongEnum");
 
@@ -278,7 +278,7 @@ public partial class DataQlks115Nhom3Context : DbContext
 
         modelBuilder.Entity<TinhTrangThanhToanEnum>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__TinhTran__3214EC0788AF99DA");
+            entity.HasKey(e => e.Id).HasName("PK__TinhTran__3214EC07F4EC5EED");
 
             entity.ToTable("TinhTrangThanhToanEnum");
 
@@ -287,7 +287,7 @@ public partial class DataQlks115Nhom3Context : DbContext
 
         modelBuilder.Entity<VaiTro>(entity =>
         {
-            entity.HasKey(e => e.MaVaiTro).HasName("PK__VaiTro__C24C41CF17961907");
+            entity.HasKey(e => e.MaVaiTro).HasName("PK__VaiTro__C24C41CF9AB51DCC");
 
             entity.ToTable("VaiTro");
 

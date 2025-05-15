@@ -110,9 +110,9 @@ CREATE TABLE HoaDon(
     TongTienDichVu INT NOT NULL,
     GhiChu NVARCHAR(100) NULL,
     NhanVien INT,
-    CONSTRAINT FK_HoaDon_DatPhong FOREIGN KEY (DatPhong) 
+    CONSTRAINT FK_HoaDon_DatPhong FOREIGN KEY (DatPhong)
     REFERENCES DatPhong(MaDatPhong),
-    CONSTRAINT FK_HoaDon_NhanVien FOREIGN KEY (NhanVien) 
+    CONSTRAINT FK_HoaDon_NhanVien FOREIGN KEY (NhanVien)
     REFERENCES NhanVien(MaNhanVien)
 );
 
@@ -124,7 +124,7 @@ CREATE TABLE ChiTietDatPhong(
     NgayNhanPhong DATE NOT NULL,
     GiaPhong INT NOT NULL,
     CONSTRAINT PK_ChiTietDatPhong PRIMARY KEY (Phong, DatPhong),
-    CONSTRAINT FK_ChiTietDatPhong_Phong FOREIGN KEY (Phong) 
+    CONSTRAINT FK_ChiTietDatPhong_Phong FOREIGN KEY (Phong)
     REFERENCES Phong(MaPhong),
     CONSTRAINT FK_ChiTietDatPhong_DatPhong FOREIGN KEY (DatPhong)
     REFERENCES DatPhong(MaDatPhong),
@@ -152,11 +152,11 @@ ALTER TABLE ChiTietDichVu DROP COLUMN GiaDichVu
 ALTER TABLE HoaDon
 ALTER COLUMN TinhTrangThanhToan TINYINT NOT NULL;
 ALTER TABLE HoaDon
-ADD CONSTRAINT FK_HoaDon_TinhTrangThanhToan 
-FOREIGN KEY (TinhTrangThanhToan) 
+ADD CONSTRAINT FK_HoaDon_TinhTrangThanhToan
+FOREIGN KEY (TinhTrangThanhToan)
 REFERENCES TinhTrangThanhToanEnum(Id);
 
--- -- Script xóa toàn bộ ràng buộc và bảng trong CSDL
+-- Script xóa toàn bộ ràng buộc và bảng trong CSDL
 -- DECLARE @sql NVARCHAR(MAX) = N'';
 -- SELECT @sql += N'ALTER TABLE ' + QUOTENAME(OBJECT_SCHEMA_NAME(parent_object_id))
 --               + N'.' + QUOTENAME(OBJECT_NAME(parent_object_id))
@@ -169,3 +169,25 @@ REFERENCES TinhTrangThanhToanEnum(Id);
 -- FROM sys.objects
 -- WHERE type = 'U';
 -- EXEC sp_executesql @sql;
+
+-- DECLARE @TableName NVARCHAR(128)
+-- DECLARE @SQL NVARCHAR(MAX)
+
+-- DECLARE TableCursor CURSOR FOR
+-- SELECT t.name
+-- FROM sys.tables t
+-- JOIN sys.columns c ON t.object_id = c.object_id
+-- WHERE c.is_identity = 1
+
+-- OPEN TableCursor
+-- FETCH NEXT FROM TableCursor INTO @TableName
+
+-- WHILE @@FETCH_STATUS = 0
+-- BEGIN
+--     SET @SQL = 'DBCC CHECKIDENT (''' + @TableName + ''', RESEED, 0)'
+--     EXEC sp_executesql @SQL
+--     FETCH NEXT FROM TableCursor INTO @TableName
+-- END
+
+-- CLOSE TableCursor
+-- DEALLOCATE TableCursor

@@ -177,8 +177,8 @@ namespace QLKS_115_Nhom3_BE.Services
                     Ho = dp.NhanVienNavigation.Ho,
                     Ten = dp.NhanVienNavigation.Ten,
                     Email = dp.NhanVienNavigation.Email,
-                    Sdt = dp.NhanVienNavigation.Sdt,        
-                    Cccd = dp.NhanVienNavigation.Cccd,       
+                    Sdt = dp.NhanVienNavigation.Sdt,
+                    Cccd = dp.NhanVienNavigation.Cccd,
                     VaiTro = dp.NhanVienNavigation.VaiTro
                 },
 
@@ -188,8 +188,8 @@ namespace QLKS_115_Nhom3_BE.Services
                     Ho = dp.KhachHangNavigation.Ho,
                     Ten = dp.KhachHangNavigation.Ten,
                     Email = dp.KhachHangNavigation.Email,
-                    Sdt = dp.KhachHangNavigation.Sdt,         
-                    Cccd = dp.KhachHangNavigation.Cccd    
+                    Sdt = dp.KhachHangNavigation.Sdt,
+                    Cccd = dp.KhachHangNavigation.Cccd
                 }
             });
 
