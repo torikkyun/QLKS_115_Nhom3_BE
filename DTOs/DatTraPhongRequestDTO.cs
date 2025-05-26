@@ -26,7 +26,7 @@
         public DateOnly NgayDatPhong { get; set; }
         public int SoPhongDat { get; set; }
         public string? GhiChu { get; set; }
-
+        public List<MaPhongSoPhong> DanhSachPhong { get; set; }
         public NhanVienDTO NhanVien { get; set; } = new();
         public KhachHangDTO KhachHang { get; set; } = new();
     }

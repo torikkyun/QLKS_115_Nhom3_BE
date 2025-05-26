@@ -18,11 +18,15 @@
 
     //     public string? GhiChu { get; set; }
     // }
-    public class PhongDTO
+
+    public class  MaPhongSoPhong
     {
         public int MaPhong { get; set; }
 
-        public string SoPhong { get; set; } = null!;
+        public string SoPhong { get; set; }
+    }
+    public class PhongDTO : MaPhongSoPhong
+    {
 
         public string? TenTinhTrang { get; set; }
 

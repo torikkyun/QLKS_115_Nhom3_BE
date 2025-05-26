@@ -161,7 +161,10 @@ namespace QLKS_115_Nhom3_BE.Services
             var query = await _context.DatPhongs
                 .Include(dp => dp.NhanVienNavigation)
                 .Include(dp => dp.KhachHangNavigation)
+                .Include(dp => dp.ChiTietDatPhongs)
+                    .ThenInclude(ct => ct.PhongNavigation) // Lấy thông tin Phong
                 .OrderByDescending(dp => dp.MaDatPhong)
+                .AsNoTracking() // Tối ưu performance khi chỉ đọc dữ liệu
                 .ToListAsync();
 
             var result = query.Select(dp => new DatPhongFullDTO
@@ -170,6 +173,12 @@ namespace QLKS_115_Nhom3_BE.Services
                 NgayDatPhong = dp.NgayDatPhong,
                 SoPhongDat = dp.SoPhongDat,
                 GhiChu = dp.GhiChu,
+
+                DanhSachPhong = dp.ChiTietDatPhongs.Select(ct => new MaPhongSoPhong
+                {
+                    MaPhong = ct.PhongNavigation.MaPhong,
+                    SoPhong = ct.PhongNavigation.SoPhong
+                }).ToList(),
 
                 NhanVien = new NhanVienDTO
                 {
